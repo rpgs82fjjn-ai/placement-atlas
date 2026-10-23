@@ -1,0 +1,10 @@
+{
+  "name": "placement-atlas-notify",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "@supabase/supabase-js": "2.45.4",
+    "nodemailer": "6.9.15",
+    "web-push": "3.6.7"
+  }
+}

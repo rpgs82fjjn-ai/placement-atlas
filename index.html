@@ -12,6 +12,10 @@
 <meta property="og:locale:alternate" content="zh_HK">
 <meta property="og:url" content="https://placement-atlas.netlify.app/">
 <link rel="canonical" href="https://placement-atlas.netlify.app/">
+<link rel="manifest" href="/manifest.webmanifest">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Placement Atlas">
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","name":"Placement Atlas 2027","url":"https://placement-atlas.netlify.app/","description":"Free, checked list of internships and work experience in Hong Kong for students, wherever they study.","inLanguage":["en-GB","zh-HK"]}</script>
 <meta name="theme-color" content="#2843b8">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%232843b8'/%3E%3Ctext x='32' y='44' font-family='Georgia,serif' font-size='36' font-weight='700' text-anchor='middle' fill='white'%3EP%3C/text%3E%3C/svg%3E">
@@ -82,6 +86,9 @@ section.list>.sub{color:var(--muted);font-size:15px;margin:0 0 8px}
 .top{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
 .kicker{margin:0;color:var(--ink);font-weight:600;font-size:15px}
 .langbtn{font:inherit;font-size:15px;padding:6px 14px;border:1px solid var(--line);border-radius:999px;background:var(--bg);color:var(--fg);cursor:pointer;min-height:36px}
+.signin{display:flex;gap:8px;flex-wrap:wrap}.signin input{flex:1 1 220px;min-width:0;font:inherit;padding:10px 12px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--fg)}
+.sets{border:0;padding:0;margin:8px 0}.sets legend{font-weight:600;margin-bottom:4px}.sets .toggle{display:block;margin:6px 0}
+.danger{color:var(--no)}
 .linkbtn{font:inherit;background:none;border:0;padding:0;color:var(--ink);text-decoration:underline;cursor:pointer}
 .langbtn:hover{border-color:var(--ink);color:var(--ink)}
 .langbtn:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
@@ -204,6 +211,9 @@ const ROWS=[
 {id:"schroders",field:"finance",anyDegree:true,region:"hk",yr:["1","2"],yrLabel:"first-years (or second-years on 4-year courses)",season:"easter",sector:"pvt",req:"open",org:"Schroders Hong Kong",place:"Hong Kong",role:"Spring Insight Programme (2 days)",when:"Two days in April",pay:"Not stated",deadline:"Opens for about 2 weeks in January",how:"Investment management rather than real estate. For first-year students (or second-years on 4-year courses). Ask about overseas-university eligibility on (852) 2521 1633.",url:"https://www.schroders.com/en-hk/hk/institutional/about-us/careers/spring-insight-programme/"},
 ];
 const FEEDBACK_URL=""; // paste a Google Form or other feedback link here
+const SUPABASE_URL=""; // e.g. https://xxxx.supabase.co (accounts stay off until this is set)
+const SUPABASE_ANON_KEY=""; // the public "anon" key from Supabase → Project Settings → API
+const VAPID_PUBLIC="BAoisyShiHbcR4mqnvKJaXawhBQsop8lcpSDVdLdEw4_3WcaBwHzCT6quFI8gVVvRFY3cLHCdx5uWk06iWsLfL8";
 const LAST_CHECKED="2026-10-23"; // ISO date, shown in both languages
 const LKEY="placement-atlas-lang";
 let lang=(()=>{try{const v=localStorage.getItem(LKEY);if(v==="en"||v==="zh")return v}catch(e){}return /^zh/i.test(navigator.language||"")?"zh":"en"})();
@@ -226,7 +236,7 @@ let prof=load(PKEY,{res:"",ukw:"",uni:"",year:"",subj:"",age:"",needs:""});
 if(["uk","eu","us"].includes(prof.res))prof.res="other";
 if(prof.res==="cn")prof.res="nl";
 let custom=load(CKEY,{items:[]});
-function put(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){stored=false}}
+function put(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){stored=false}if(typeof cloudSave==="function")cloudSave()}
 let comm=null,dl=null,q="",sortBy="match";
 let F={field:"all",region:"all",season:"all"},onlyMine=false,subjMode="rel",sample=null,ai={busy:false,result:null,error:"",ctl:null},hl=null,formMsg="";
 const NO=()=>L("Not open to you: ","不適用：");
@@ -326,6 +336,102 @@ function resultHTML(){
 const BOARDS=[
  [["Hong Kong job boards","香港求職網站"],[["GradConnection HK","https://hk.gradconnection.com"],["CTgoodjobs","https://www.ctgoodjobs.hk"],["JobsDB","https://hk.jobsdb.com"],["LinkedIn Jobs","https://www.linkedin.com/jobs"]]],
  [["Government jobs","政府職位"],[["Civil Service Bureau","https://www.csb.gov.hk"]]]];
+
+let sb=null,user=null,acct={email:"",msg:"",busy:false,push:"unknown",confirmDel:false,set:{notify_deadlines:true,notify_new:true,notify_email:true}};
+const ACCOUNTS=!!(SUPABASE_URL&&SUPABASE_ANON_KEY);
+let saveTimer=null;
+function cloudRow(){return{user_id:user.id,prof,state,custom,lang,notify_deadlines:acct.set.notify_deadlines,notify_new:acct.set.notify_new,notify_email:acct.set.notify_email,updated_at:new Date().toISOString()}}
+function cloudSave(){if(!sb||!user)return;clearTimeout(saveTimer);saveTimer=setTimeout(async()=>{const{error}=await sb.from("profiles").upsert(cloudRow());if(error){acct.msg=L("Couldn't save to your account just now; your changes are still on this device.","暫時未能儲存到帳戶，更改仍保留在這部裝置。");rerender()}},700)}
+async function cloudPull(){
+  const{data,error}=await sb.from("profiles").select("*").eq("user_id",user.id).maybeSingle();
+  if(error){acct.msg=L("Couldn't load your saved data. Try reloading.","未能載入已儲存的資料，請重新載入。");return}
+  if(data){
+    const cp=data.prof||{};for(const k of Object.keys(cp)){if(cp[k]!==""&&cp[k]!=null)prof[k]=cp[k]}
+    const cs=data.state||{};state.status=Object.assign({},state.status,cs.status||{});state.notes=Object.assign({},state.notes,cs.notes||{});
+    const ids=new Set(custom.items.map(c=>c.id));(data.custom&&data.custom.items||[]).forEach(c=>{if(!ids.has(c.id))custom.items.push(c)});
+    if(data.lang==="en"||data.lang==="zh")lang=data.lang;
+    acct.set={notify_deadlines:data.notify_deadlines!==false,notify_new:data.notify_new!==false,notify_email:data.notify_email!==false};
+  }
+  try{localStorage.setItem(PKEY,JSON.stringify(prof));localStorage.setItem(KEY,JSON.stringify(state));localStorage.setItem(CKEY,JSON.stringify(custom));localStorage.setItem(LKEY,lang)}catch(e){}
+  await sb.from("profiles").upsert(cloudRow());
+}
+const pushSupported=()=>"serviceWorker" in navigator&&"PushManager" in window&&"Notification" in window;
+const isIOS=()=>/iPad|iPhone|iPod/.test(navigator.userAgent)||(navigator.platform==="MacIntel"&&navigator.maxTouchPoints>1);
+const standalone=()=>matchMedia("(display-mode: standalone)").matches||navigator.standalone===true;
+function b64u(s){const p="=".repeat((4-s.length%4)%4),b=atob((s+p).replace(/-/g,"+").replace(/_/g,"/"));return Uint8Array.from(b,c=>c.charCodeAt(0))}
+async function pushState(){
+  if(!pushSupported()){acct.push=isIOS()&&!standalone()?"ios":"unsupported";return}
+  if(Notification.permission==="denied"){acct.push="denied";return}
+  try{const reg=await navigator.serviceWorker.getRegistration("/");const sub=reg&&await reg.pushManager.getSubscription();acct.push=sub?"on":"off"}catch(e){acct.push="off"}
+}
+async function pushOn(){
+  if(!pushSupported())return;
+  acct.busy=true;rerender();
+  try{
+    const perm=await Notification.requestPermission();
+    if(perm!=="granted"){acct.push=perm==="denied"?"denied":"off";acct.busy=false;rerender();return}
+    const reg=await navigator.serviceWorker.register("/sw.js",{scope:"/"});await navigator.serviceWorker.ready;
+    const sub=(await reg.pushManager.getSubscription())||await reg.pushManager.subscribe({userVisibleOnly:true,applicationServerKey:b64u(VAPID_PUBLIC)});
+    const j=sub.toJSON();
+    const{error}=await sb.from("push_subs").upsert({user_id:user.id,endpoint:j.endpoint,p256dh:j.keys.p256dh,auth:j.keys.auth,user_agent:navigator.userAgent.slice(0,200)},{onConflict:"endpoint"});
+    acct.push=error?"off":"on";acct.msg=error?L("Couldn't turn on notifications. Try again.","未能開啟通知，請再試。"):L("Notifications are on for this device.","此裝置已開啟通知。");
+  }catch(e){acct.msg=L("Couldn't turn on notifications on this browser.","此瀏覽器未能開啟通知。")}
+  acct.busy=false;rerender();
+}
+async function pushOff(){
+  try{const reg=await navigator.serviceWorker.getRegistration("/");const sub=reg&&await reg.pushManager.getSubscription();if(sub){await sb.from("push_subs").delete().eq("endpoint",sub.endpoint);await sub.unsubscribe()}}catch(e){}
+  acct.push="off";acct.msg=L("Notifications are off for this device.","此裝置已關閉通知。");rerender();
+}
+async function sendLink(){
+  const em=(acct.email||"").trim();
+  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(em)){acct.msg=L("Enter a valid email address.","請輸入有效的電郵地址。");rerender();return}
+  acct.busy=true;acct.msg="";rerender();
+  const{error}=await sb.auth.signInWithOtp({email:em,options:{emailRedirectTo:location.origin+"/"}});
+  acct.busy=false;acct.msg=error?L("Couldn't send the link: ","未能發送連結：")+error.message:L(`Check ${em} for a sign-in link. It can take a minute; look in spam too.`,`請到 ${em} 查看登入連結，可能需時一分鐘，亦請檢查垃圾郵件。`);rerender();
+}
+async function deleteMe(){
+  if(!acct.confirmDel){acct.confirmDel=true;rerender();return}
+  acct.busy=true;rerender();
+  try{const reg=await navigator.serviceWorker.getRegistration("/");const sub=reg&&await reg.pushManager.getSubscription();if(sub)await sub.unsubscribe()}catch(e){}
+  const{error}=await sb.rpc("delete_me");
+  if(error){acct.busy=false;acct.confirmDel=false;acct.msg=L("Couldn't delete your account. Try again.","未能刪除帳戶，請再試。");rerender();return}
+  await sb.auth.signOut();user=null;acct={email:"",msg:L("Your account and saved data have been deleted. Anything on this device stays until you clear it.","你的帳戶及已儲存的資料已刪除。這部裝置上的資料會保留，直至你清除。"),busy:false,push:"off",confirmDel:false,set:acct.set};rerender();
+}
+function acctHTML(){
+  if(!ACCOUNTS)return "";
+  if(!user)return `<section class="panel acct" aria-labelledby="ac"><h2 id="ac">${L("Save your list and get reminders","儲存你的清單並接收提醒")}</h2>
+  <p>${L("Sign in with your email to keep your answers, statuses and notes on every device, and get a notification 7 days and 1 day before deadlines, plus alerts when a new job fits you. No password needed.","用電郵登入，便可在所有裝置保留你的資料、進度及筆記，並在截止前 7 日及 1 日收到通知，有適合你的新職位時亦會通知你。不需要密碼。")}</p>
+  <div class="signin"><label for="ac-email" class="sr">${L("Email","電郵")}</label><input type="email" id="ac-email" autocomplete="email" placeholder="${L("you@example.com","你的電郵")}" value="${esc(acct.email)}"><button type="button" class="btn" id="ac-send"${acct.busy?" disabled":""}>${L("Email me a sign-in link","發送登入連結")}</button></div>
+  ${acct.msg?`<p class="hint" aria-live="polite">${esc(acct.msg)}</p>`:""}</section>`;
+  const tg=(k,en,zh)=>`<label class="toggle"><input type="checkbox" data-set="${k}"${acct.set[k]?" checked":""}> ${L(en,zh)}</label>`;
+  const pushBit={on:`<p>${L("✓ Notifications are on for this device.","✓ 此裝置已開啟通知。")} <button type="button" class="linkbtn" id="push-off">${L("Turn off","關閉")}</button></p>`,
+    off:`<p><button type="button" class="btn ghost" id="push-on"${acct.busy?" disabled":""}>${L("Turn on notifications on this device","在此裝置開啟通知")}</button></p>`,
+    denied:`<p class="hint">${L("Notifications are blocked for this site. Allow them in your browser's site settings, then reload.","此網站的通知已被封鎖。請在瀏覽器的網站設定中允許，然後重新載入。")}</p>`,
+    ios:`<p class="hint">${L("On iPhone or iPad: tap Share, then “Add to Home Screen”, open Placement Atlas from your home screen and sign in there to turn on notifications. Until then you'll get reminders by email.","iPhone 或 iPad：按「分享」→「加至主畫面」，再從主畫面開啟實習地圖並登入，便可開啟通知。在此之前，提醒會以電郵發送。")}</p>`,
+    unsupported:`<p class="hint">${L("This browser can't show notifications; you'll get reminders by email.","此瀏覽器不支援通知，提醒會以電郵發送。")}</p>`,
+    unknown:""}[acct.push]||"";
+  return `<section class="panel acct" aria-labelledby="ac"><h2 id="ac">${L("Your account","你的帳戶")}</h2>
+  <p>${L(`Signed in as <b>${esc(user.email||"")}</b>. Your answers, statuses and notes are saved to your account.`,`已登入：<b>${esc(user.email||"")}</b>。你的資料、進度及筆記會儲存到帳戶。`)}</p>
+  ${pushBit}
+  <fieldset class="sets"><legend>${L("Send me","通知我")}</legend>${tg("notify_deadlines","Deadline reminders (7 days and 1 day before) for jobs I'm tracking or that fit me","截止提醒（前 7 日及 1 日），適用於我正在跟進或適合我的職位")}${tg("notify_new","New jobs that fit my subject and year","適合我學科及年級的新職位")}${tg("notify_email","Email copies of these alerts","以電郵發送這些提醒")}</fieldset>
+  ${acct.msg?`<p class="hint" aria-live="polite">${esc(acct.msg)}</p>`:""}
+  <div class="actions"><button type="button" class="btn ghost" id="ac-out">${L("Sign out","登出")}</button><button type="button" class="btn ghost danger" id="ac-del"${acct.busy?" disabled":""}>${acct.confirmDel?L("Tap again to delete everything","再按一次以刪除所有資料"):L("Delete my account","刪除我的帳戶")}</button></div></section>`;
+}
+async function initAccounts(){
+  if(!ACCOUNTS)return;
+  try{
+    await new Promise((res,rej)=>{const sc=document.createElement("script");sc.src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js";sc.onload=res;sc.onerror=rej;document.head.appendChild(sc)});
+    sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY,{auth:{persistSession:true,detectSessionInUrl:true,flowType:"implicit"}});
+    sb.auth.onAuthStateChange(async(ev,session)=>{
+      const was=user&&user.id;user=session?session.user:null;
+      if(user&&was!==user.id){await cloudPull();await pushState();acct.msg="";if(location.hash.includes("access_token"))history.replaceState(null,"",location.pathname)}
+      render();
+    });
+    const{data}=await sb.auth.getSession();user=data.session?data.session.user:null;
+    if(user){await cloudPull();await pushState()}
+    render();
+  }catch(e){acct.msg=L("Sign-in isn't available right now.","暫時未能登入。");render()}
+}
 function allRows(){return ROWS.concat(custom.items.map(c=>Object.assign({custom:true,season:"mine"},c)))}
 function render(){
   const app=document.getElementById("app");
@@ -349,6 +455,7 @@ function render(){
   <p class="intro">${L("Internships, insight programmes and work experience in Hong Kong: government, banks, utilities, property, law and more. I check every listing against the official page, say plainly who can apply, and keep it free.","香港的實習、體驗計劃及工作經驗：政府、銀行、公用事業、地產、法律等。每一項我都會對照官方網頁核實，清楚寫明誰可以申請，而且完全免費。")}</p>
   <p class="byline">${L(`Made by a Hong Kong student at the University of Manchester · ${ROWS.length} listings in Hong Kong · last checked ${dlong(LAST_CHECKED)}`,`由一位在曼徹斯特大學讀書的香港學生製作 · 共 ${ROWS.length} 個香港機會 · 最後核對：${dlong(LAST_CHECKED)}`)}</p></header>
   ${urgent.length?`<p class="soon"><b>${L("Closing soon:","即將截止：")}</b> ${urgent.map(({r,t})=>`<a href="#row-${r.id}" data-jump="${r.id}">${esc(rf(r,"org"))}</a> – ${esc(lang==="zh"?t:t.charAt(0).toLowerCase()+t.slice(1))}`).join(L(", ","、"))}</p>`:""}
+  ${acctHTML()}
   <form class="search" id="sform" role="search"><label for="f-q" class="sr">${L("Search opportunities","搜尋機會")}</label><input type="search" id="f-q" placeholder="${L("Search: firm, city or subject","搜尋：公司、城市或學科")}" value="${esc(q)}"><button type="submit" class="btn">${L("Search","搜尋")}</button></form>
   <section class="panel" aria-labelledby="fm"><h2 id="fm">${L("What can I apply for?","我可以申請甚麼？")}</h2>
   <p>${L("Fill in what you know. Every listing below will then say whether it's open to you, and the best fits for your subject move to the top. Nothing you enter leaves this browser.","填寫你知道的資料，下面每一項便會顯示你是否合資格，最適合你學科的會排在最前。你輸入的資料只會留在這個瀏覽器。")}</p>
@@ -386,7 +493,7 @@ function render(){
   <dl class="boards">${BOARDS.map(([k,list])=>`<dt>${esc(T(k))}</dt><dd>${list.map(([n,u])=>`<a href="${u}" target="_blank" rel="noopener">${esc(n)}</a>`).join(" · ")}</dd>`).join("")}</dl></section>
   ${!comm&&FEEDBACK_URL?`<section class="panel" aria-labelledby="fb2"><h2 id="fb2">${L("Spotted a mistake or a missing scheme?","發現錯誤或遺漏？")}</h2><p>${L("Tell me. I read every message and fix things quickly.","請告訴我，我會細閱每個訊息並盡快更正。")}</p><p><a class="btn" href="${esc(FEEDBACK_URL)}" target="_blank" rel="noopener">${L("Send feedback","提供意見")}</a></p></section>`:""}
   ${comm?`<section class="panel" id="fb-panel" aria-labelledby="fb"><h2 id="fb">${L("Spotted a mistake or a missing scheme?","發現錯誤或遺漏？")}</h2><p>${L("Tell me. I read every comment and fix things quickly.","請告訴我，我會細閱每個留言並盡快更正。")}</p><div class="actions"><button type="button" class="btn" id="fb-btn">${L("Leave feedback","留言")}</button></div></section>`:""}
-  <footer><p>${L(`Last checked ${dlong(LAST_CHECKED)}. Deadlines and rules change, so always confirm on the official page before you apply. I'm not linked to any of the employers or universities listed.`,`最後核對：${dlong(LAST_CHECKED)}。截止日期及規定或有改變，申請前請務必在官方網頁確認。本站與列出的僱主及大學並無關連。`)}</p><p>${stored?L("Your answers, statuses, notes and finds stay in this browser. Nobody else can see them, including me.","你的資料、進度、筆記及記錄只會留在這個瀏覽器，其他人（包括我）都看不到。"):L("Your browser isn't letting this page save, so your answers will clear when you leave.","你的瀏覽器不允許本頁儲存資料，離開後資料會被清除。")}</p></footer>`;
+  <footer><p>${L(`Last checked ${dlong(LAST_CHECKED)}. Deadlines and rules change, so always confirm on the official page before you apply. I'm not linked to any of the employers or universities listed.`,`最後核對：${dlong(LAST_CHECKED)}。截止日期及規定或有改變，申請前請務必在官方網頁確認。本站與列出的僱主及大學並無關連。`)}</p><p>${stored?(ACCOUNTS?L("If you don't sign in, your answers, statuses and notes stay in this browser only. If you sign in, they're also stored in a private database so they sync across your devices and power your reminders; only you can read them, and you can delete your account at any time.","如不登入，你的資料、進度及筆記只會留在這個瀏覽器。如登入，資料亦會儲存在私人資料庫，以便在不同裝置同步及發送提醒；只有你能讀取，亦可隨時刪除帳戶。"):L("Your answers, statuses, notes and finds stay in this browser. Nobody else can see them, including me.","你的資料、進度、筆記及記錄只會留在這個瀏覽器，其他人（包括我）都看不到。")):L("Your browser isn't letting this page save, so your answers will clear when you leave.","你的瀏覽器不允許本頁儲存資料，離開後資料會被清除。")}</p></footer>`;
 }
 function rerender(){const a=document.activeElement,id=a&&a.id,s=a&&a.selectionStart;render();if(id){const n=document.getElementById(id);if(n){n.focus();try{if(s!=null)n.setSelectionRange(s,s)}catch(e){}}}}
 async function ask(){
@@ -429,7 +536,12 @@ function addCustom(){
   put(CKEY,custom);formMsg=L("Added to your tracker.","已加入你的記錄。");render();
 }
 document.addEventListener("click",e=>{
-  if(e.target.closest("#lang-btn")){lang=lang==="zh"?"en":"zh";try{localStorage.setItem(LKEY,lang)}catch(err){}formMsg="";render();const b=document.getElementById("lang-btn");if(b)b.focus();return}
+  if(e.target.closest("#ac-send")){sendLink();return}
+  if(e.target.closest("#ac-out")){sb&&sb.auth.signOut();user=null;acct.msg=L("Signed out. Your data stays on this device too.","已登出。資料亦會保留在這部裝置。");render();return}
+  if(e.target.closest("#ac-del")){deleteMe();return}
+  if(e.target.closest("#push-on")){pushOn();return}
+  if(e.target.closest("#push-off")){pushOff();return}
+  if(e.target.closest("#lang-btn")){lang=lang==="zh"?"en":"zh";try{localStorage.setItem(LKEY,lang)}catch(err){}cloudSave();formMsg="";render();const b=document.getElementById("lang-btn");if(b)b.focus();return}
   const sm=e.target.closest("[data-sm]");if(sm){subjMode=sm.dataset.sm;render();const n=document.getElementById("results");if(n)n.scrollIntoView({block:"start"});return}
   if(e.target.closest("#ask")){ask();return}
   if(e.target.closest("#stop")){ai.ctl&&ai.ctl.abort();return}
@@ -445,6 +557,7 @@ document.addEventListener("change",e=>{const t=e.target;
   if(t.matches("select[data-flt]")){F[t.dataset.flt]=t.value;rerender();return}
   if(t.id==="f-sort"){sortBy=t.value;rerender();return}
   if(t.matches("[data-p]")&&t.dataset.p!=="needs"){if(t.dataset.p==="subj")subjMode="rel";prof[t.dataset.p]=t.value;put(PKEY,prof);rerender();return}
+  if(t.matches("input[data-set]")){acct.set[t.dataset.set]=t.checked;cloudSave();return}
   if(t.id==="mine"){onlyMine=t.checked;render()}
 });
 function csvCell(v){v=String(v==null?"":v);return /[",\n]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v}
@@ -460,13 +573,15 @@ async function exportCSV(){
 }
 document.addEventListener("toggle",e=>{const d=e.target;if(d&&d.dataset&&d.dataset.openId){if(d.open)OPEN.add(d.dataset.openId);else OPEN.delete(d.dataset.openId)}},true);
 document.addEventListener("submit",e=>{if(e.target.id==="sform"){e.preventDefault();const i=document.getElementById("f-q");q=i?i.value.trim():"";F={field:"all",region:"all",season:"all"};render();const n=document.getElementById("results");if(n)n.scrollIntoView({behavior:matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth",block:"start"})}});
-document.addEventListener("input",e=>{if(e.target.id==="f-q"){q=e.target.value;rerender()}});
+document.addEventListener("input",e=>{if(e.target.id==="f-q"){q=e.target.value;rerender()}if(e.target.id==="ac-email")acct.email=e.target.value});
+document.addEventListener("keydown",e=>{if(e.target.id==="ac-email"&&e.key==="Enter"){e.preventDefault();sendLink()}});
 document.addEventListener("focusout",e=>{const t=e.target;
   if(t.matches("textarea[data-id]")&&(state.notes[t.dataset.id]||"")!==t.value){state.notes[t.dataset.id]=t.value;put(KEY,state)}
   if(t.id==="p-needs"&&prof.needs!==t.value){prof.needs=t.value;put(PKEY,prof)}
 });
 render();
 try{const h=location.hash;if(/^#row-[A-Za-z0-9_-]+$/.test(h)&&ROWS.some(r=>"row-"+r.id===h.slice(1))){hl=h.slice(5);render();const n=document.getElementById(h.slice(1));if(n)n.scrollIntoView({block:"start"})}}catch(e){}
+initAccounts();
 if(window.claude&&window.claude.use){window.claude.use("sample").then(s=>{if(s){sample=s;rerender()}}).catch(()=>{});window.claude.use("comments").then(c=>{if(c){comm=c;rerender()}}).catch(()=>{});window.claude.use("downloads").then(d=>{if(d){dl=d;rerender()}}).catch(()=>{})}
 })();
 </script>

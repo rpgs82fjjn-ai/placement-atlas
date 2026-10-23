@@ -1,0 +1,15 @@
+{
+  "name": "Placement Atlas 2027 · 實習地圖",
+  "short_name": "Placement Atlas",
+  "description": "Hong Kong internships and work experience for students, with deadline reminders.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#2843b8",
+  "icons": [
+    { "src": "/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
