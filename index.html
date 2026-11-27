@@ -28,7 +28,7 @@
 /* Placement Atlas: signage-like Archivo headings, Public Sans text, one brand blue plus a signal red for time.
    The memorable element is the application-year route line; everything else stays quiet. */
 :root{
-  --bg:#f3f4f7; --surface:#ffffff; --fg:#18202f; --muted:#596173; --line:#dfe2e8; --line-strong:#c6cbd5;
+  --bg:#f3f4f7; --surface:#ffffff; --fg:#18202f; --muted:#4b5263; --line:#dfe2e8; --line-strong:#c6cbd5;
   --ink:#2843b8; --ink-soft:#e8ecfb; --signal:#cf3a2e; --signal-soft:#fbe7e4;
   --hi:#fff0a3; --hi-fg:#5a4300;
   --ok:#1d6b3b; --ok-soft:#e5f3ea; --check:#835600; --check-soft:#fbf1dc; --no:#a3322b; --no-soft:#fbe9e7;
@@ -79,7 +79,7 @@ h3{font-family:var(--head);font-weight:700;font-size:18px;margin:0}
 .cy-scroll{overflow-x:auto;margin:0 -4px;padding:0 4px 4px}
 .cy-track{position:relative;min-width:680px;padding-top:26px}
 .cy-bands{position:relative;height:128px}
-.cy-band{position:absolute;z-index:1;height:26px;border-radius:13px;font-size:13px;font-weight:600;padding:0 12px;display:flex;align-items:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;box-sizing:border-box}
+.cy-band{position:absolute;z-index:1;height:26px;border-radius:13px;font-size:14px;font-weight:600;padding:0 12px;display:flex;align-items:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;box-sizing:border-box}
 .cy-band.a{background:var(--ink-soft);color:var(--ink)}
 .cy-band.b{background:var(--signal-soft);color:var(--signal)}
 .cy-band.c{background:transparent;color:var(--fg);border:1.5px dashed var(--line-strong)}
@@ -182,7 +182,56 @@ section.list>.sub{color:var(--muted);font-size:15px;margin:0 0 10px;max-width:70
 footer{background:var(--foot-bg);color:var(--foot-fg);font-size:14px;border-radius:16px 16px 0 0;padding:24px;display:flex;flex-direction:column;gap:8px;margin-top:12px}
 footer p{margin:0;max-width:80ch}
 footer a{color:#fff}
-@media (max-width:600px){.cycle,.panel,section.list{padding-left:16px;padding-right:16px}.hero{padding-top:24px}}
+@media (max-width:600px){.cycle,.panel,section.list{padding-left:16px;padding-right:16px}.hero{padding-top:20px;gap:14px}h1{font-size:30px}.intro{font-size:16px}.cycle{padding-top:18px;padding-bottom:18px}}
+.skip{position:absolute;left:-999px;top:8px;z-index:10;background:var(--ink);color:var(--surface);padding:8px 14px;border-radius:8px;font-weight:600}
+.skip:focus{left:16px}
+.bname{white-space:nowrap}
+.ls{display:none}
+@media (max-width:480px){.lf{display:none}.ls{display:inline}.langbtn{min-width:44px;min-height:40px}.signin-link{min-height:40px;display:inline-flex;align-items:center}}
+details.prof>summary,details.filters>summary{cursor:pointer;list-style:none;display:flex;flex-direction:column;gap:4px}
+details.prof>summary::-webkit-details-marker,details.filters>summary::-webkit-details-marker{display:none}
+.sumrow{display:flex;justify-content:space-between;align-items:baseline;gap:12px}
+.sumrow .edit{font-size:14px;font-weight:600;color:var(--ink)}
+details.prof[open] .sumrow .edit{display:none}
+.prof-sum{font-size:14px;color:var(--muted)}
+details.prof[open] .prof-sum{display:none}
+details.prof:not([open]){gap:0}
+details.prof[open]>summary{margin-bottom:12px}
+details.prof>:not(summary)+:not(summary){margin-top:14px}
+details.filters{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px 20px;display:flex;flex-direction:column;gap:12px}
+details.filters>summary{font-weight:600;font-size:15px;flex-direction:row;align-items:center;gap:6px;min-height:28px}
+details.filters>summary::before{content:"";width:8px;height:8px;border-right:2px solid currentColor;border-bottom:2px solid currentColor;transform:rotate(-45deg);margin-right:4px;transition:transform .15s}
+details.filters[open]>summary::before{transform:rotate(45deg)}
+details.filters .n{color:var(--ink)}
+details.filters .toolbar{background:none;border:0;padding:0;margin-top:12px}
+details.filters .toggle{margin-top:12px}
+.dline{margin:0;font-size:15px}
+.dline b{font-weight:600}
+details.spec{border-top:1px solid var(--line);padding:16px 0}
+details.spec>summary{cursor:pointer;display:flex;flex-direction:column;gap:4px;list-style:none;min-height:44px;justify-content:center}
+details.spec>summary::-webkit-details-marker{display:none}
+.spec-t{font-family:var(--head);font-weight:700;font-size:18px;color:var(--fg)}
+.spec-t::after{content:" +";color:var(--ink)}
+details.spec[open] .spec-t::after{content:" −"}
+.spec-s{font-size:15px;color:var(--muted)}
+details.spec .item{margin-left:16px;padding-left:16px;border-left:3px solid var(--ink-soft)}
+details.spec .item:last-child{border-bottom:0}
+.item summary{padding:10px 0;min-height:24px}
+.btn.small{min-height:40px;display:inline-flex;align-items:center;gap:4px;padding:6px 14px;line-height:1.2;box-sizing:border-box}
+details.filters:not([open]){gap:0}
+.copy{min-height:36px;padding:6px 12px}
+.cy-list{display:none;list-style:none;margin:0;padding:0;gap:10px}
+.cy-list li{display:grid;grid-template-columns:14px 1fr auto;align-items:center;gap:4px 10px;font-size:15px}
+.cy-list .sw{width:14px;height:14px;border-radius:4px;grid-row:span 2}
+.cy-list .a .sw{background:var(--ink-soft);border:1px solid var(--ink)}
+.cy-list .b .sw{background:var(--signal-soft);border:1px solid var(--signal)}
+.cy-list .c .sw{border:1.5px dashed var(--line-strong)}
+.cy-list .d .sw{background:var(--ink)}
+.cy-list .t{font-weight:600}
+.cy-list .r{grid-column:2;color:var(--muted);font-size:14px}
+.cy-list .nowtag{grid-column:3;grid-row:1/span 2;font-size:13px;font-weight:700;color:var(--surface);background:var(--signal);padding:2px 10px;border-radius:999px}
+@media (max-width:640px){.cy-scroll{display:none}.cy-list{display:grid}}
+.about p{max-width:75ch}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}html{scroll-behavior:auto}}
 </style>
 </head>
@@ -195,9 +244,9 @@ linkhk:{org:"年利達香港 (Linklaters)",role:"香港暑期實習計劃",place
 wchk:{org:"偉凱律師事務所香港 (White & Case)",role:"2027 暑期實習計劃",place:"香港",when:"2027 年 7 月，為期 4 星期（確實日期於招聘期間確認）",pay:"未有列明",deadline:"2026 年 12 月 31 日",how:"適合就讀澳洲、英國或香港、希望在 2029 年開始見習律師合約的法律系學生。經網頁上的招聘系統申請。律所亦有冬季實習（2026 年冬季已於 8 月截止）。"},
 withershk:{org:"衛達仕香港 (Withers)",role:"2027 香港暑期實習計劃",place:"香港",when:"2027 年 6 月或 7 月，為期 4 星期",pay:"未有列明",deadline:"2027 年 1 月 31 日",how:"想在 2029 年開始衛達仕見習律師合約的學生應申請此計劃。經衛達仕網上招聘系統申請。"},
 sullcrom:{org:"蘇利文．克倫威爾香港 (Sullivan & Cromwell)",role:"暑期實習計劃",place:"香港",when:"6 月或 7 月，為期 4 星期",pay:"未有列明",deadline:"未有公布截止日期，宜及早申請",how:"適合有意申請該所見習律師合約的學生。把求職信、履歷及最新成績單電郵至 hkrecruiting@sullcrom.com。入選者會與合夥人面試，實習結束時會有見習律師合約面試。"},
-swiregrp:{org:"太古集團",role:"2027 太古暑期實習計劃",place:"香港",when:"2027 年 7 月 2 日至 8 月 20 日，共 8 星期",pay:"未有列明；如派駐外地，太古會安排簽證並負責交通及住宿",deadline:"2027 年 1 月 31 日晚上 11 時 59 分（香港時間）；2026 年 12 月 28 日開始接受申請",how:"任何學科、全球任何大學均可申請。香港居民會派駐香港；其他申請人或派駐香港或內地。流程：網上申請、視像面試（2 月）、小組案例討論及最後面試（3 月），4 月中前發出取錄。需英語優秀。查詢：swireprogrammes@jsshk.com。",yrLabel:"倒數第二年本科生或 2028 年 7 月前畢業的研究生"},
+swiregrp:{org:"太古集團",role:"2027 太古暑期實習計劃",place:"香港",when:"2027 年 7 月 2 日至 8 月 20 日，共 8 星期",pay:"未有列明；如派駐外地，太古會安排簽證並負責交通及住宿",deadline:"2027 年 1 月 31 日晚上 11 時 59 分（香港時間）；2026 年 12 月 28 日開始接受申請",how:"任何學科、全球任何大學均可申請。香港居民會派駐香港；其他申請人或派駐香港或內地。流程：網上申請、視像面試（2 月）、小組案例討論及最後面試（3 月），4 月中前發出取錄。需英語優秀。查詢：swireprogrammes@jsshk.com。",yrLabel:"畢業前一年本科生或 2028 年 7 月前畢業的研究生"},
 sfc:{org:"證券及期貨事務監察委員會（證監會）",role:"暑期及冬季實習計劃",place:"香港",when:"為期 6 星期，通常 7 月至 8 月（冬季：12 月至 1 月）",pay:"未有列明",deadline:"暑期實習 3 月開始接受申請；2026 年冬季實習已於 10 月 11 日截止",how:"適合主修法律、會計、經濟、金融、管理或資訊科技的本科生或研究生，本地及海外學生均歡迎。需良好中英文讀寫及會話能力。經證監會招聘網頁網上申請；如截止後兩個月內未獲聯絡，即當作未獲取錄。"},
-hkex:{org:"香港交易所",role:"2027 暑期實習計劃",place:"香港",when:"2027 年 6 月中起，為期 10 星期",pay:"未有列明",deadline:"2027 年香港實習已截止申請；請留意網頁公布下一輪招聘",how:"任何學科，預計 GPA 3.5/4.0、二級一等榮譽或同等。可選最多三個業務部門。表現出色者或獲邀加入畢業生計劃。查詢：earlycareers@hkex.com.hk。",yrLabel:"2027 年 9 月至 2028 年 7 月畢業的倒數第二年學生"},
+hkex:{org:"香港交易所",role:"2027 暑期實習計劃",place:"香港",when:"2027 年 6 月中起，為期 10 星期",pay:"未有列明",deadline:"2027 年香港實習已截止申請；請留意網頁公布下一輪招聘",how:"任何學科，預計 GPA 3.5/4.0、二級一等榮譽或同等。可選最多三個業務部門。表現出色者或獲邀加入畢業生計劃。查詢：earlycareers@hkex.com.hk。",yrLabel:"2027 年 9 月至 2028 年 7 月畢業的畢業前一年學生"},
 hkstp:{org:"香港科技園公司",role:"科學園實習計劃",place:"香港科學園",when:"7 月起，為期 6–8 星期",pay:"未有列明；可向 internship@hkstp.org 查詢",deadline:"2026 年度於 2025 年 11 月至 2026 年 2 月 28 日接受申請；請留意 2027 年度招聘",how:"適合香港或海外大學任何學科、有志投身創新科技的本科生及研究生。需良好中英文讀寫及會話能力。3 月至 6 月面試，7 月上班。"},
 doj:{org:"律政司",role:"暑期實習計劃（法律）",place:"香港",when:"暑假",pay:"每月 HK$11,500（2026 年）",deadline:"2026 年：1 月 26 日公布，2 月 6 日截止（申請期很短）",how:"適合全日制法律系學生、香港永久性居民，需粵語及英語流利。每年招聘，通告在律政司及公務員事務局網站公布。查詢：training@doj.gov.hk。",subjLabel:"法律系學生",yrLabel:"三年級或以上的法律系學生，或法律研究生"},
 cchk:{org:"高偉紳香港 (Clifford Chance)",role:"2027 暑期實習計劃",place:"香港",when:"2027 年為期 4 星期：第一期 5 月 31 日或 6 月 7 日開始，第二期 6 月 28 日或 7 月 5 日開始",pay:"未有列明",deadline:"2026 年 12 月 22 日（滾動審批，宜早申請）",how:"適合就讀香港、澳洲、新西蘭、加拿大或英格蘭大學、可銜接 PCLL 的法律或雙學位學生，或已修 GDL 的非法律系畢業生。懂普通話或粵語（包括中文讀寫）優先。"},
@@ -205,30 +254,30 @@ dh:{org:"衞生署",role:"暑期實習生（2026 年共 26 個職位）",place:"
 aahk:{org:"香港機場管理局",role:"暑期實習計劃",place:"香港國際機場",when:"暑假 8 星期",pay:"未有列明",deadline:"每年 3 月底或 4 月開始招聘",how:"項目涵蓋機場營運、工程及商業。表現出色的實習生可快速進入見習管理人員或畢業工程師計劃。"},
 kpmghk:{org:"畢馬威中國（香港）",role:"審計及稅務暑期實習",place:"香港",when:"6 月至 8 月，至少 8 星期",pay:"未有列明",deadline:"未有列明；秋季起留意畢馬威 Basecamp 招聘頁面",how:"任何年級、任何學科。需英語流利，並懂粵語或普通話。"},
 pwchk:{org:"羅兵咸永道香港",role:"香港實習計劃（暑期及冬季）",place:"香港",when:"暑期或冬季",pay:"未有列明",deadline:"未有列明；請查看羅兵咸永道學生招聘頁面",how:"所有學科均可。每年兩期：暑期及冬季。",yrLabel:"2027 年或之後畢業的學生"},
-scbhk:{org:"渣打銀行（香港）",role:"2027 環球銀行暑期實習",place:"香港",when:"2027 年 6 月起，為期 10 星期",pay:"未有列明",deadline:"2026 年 10 月 9 日（10 月起舉行評核中心）",how:"任何學位。需有在香港工作的永久權利。渣打在香港亦有財富及零售銀行和金融市場實習。",yrLabel:"倒數第二年學生"},
+scbhk:{org:"渣打銀行（香港）",role:"2027 環球銀行暑期實習",place:"香港",when:"2027 年 6 月起，為期 10 星期",pay:"未有列明",deadline:"2026 年 10 月 9 日（10 月起舉行評核中心）",how:"任何學位。需有在香港工作的永久權利。渣打在香港亦有財富及零售銀行和金融市場實習。",yrLabel:"畢業前一年學生"},
 oxfamhk:{org:"樂施會（香港）",role:"實習計劃（發展、人道救援、政策倡議、公眾教育）",place:"香港",when:"與督導商議",pay:"屬義務性質；可詢問開支津貼",deadline:"隨時以實習申請表申請",how:"大部分實習生經本地大學安排，但亦歡迎個人申請。可申請已刊登的職位，或提出你想參與的範疇。需良好的中文及／或英文書寫能力。"},
 hyabsi:{org:"數碼港 × 民政及青年事務局",role:"青年初創實習計劃（科技初創）",place:"香港",when:"3 至 6 個月，全職、兼職或混合",pay:"每月最多 HK$11,490（政府資助）",deadline:"2026 年於 1 月 15 日開始接受申請；留意 2027 年",how:"在數碼港及其他初創企業實習，經 Jobsdb 直接申請。18–30 歲全日制學生。持永久性香港身份證者可在任何地方讀書；其他香港身份證持有人須在港全日制就讀。"},
 stemis:{org:"創新科技署",role:"STEM 實習計劃",place:"香港",when:"4 星期至 3 個月（暑假、寒假或學期中）",pay:"每月 HK$11,790 津貼，由政府支付",deadline:"由你的大學訂定；職位名單經大學就業或學院辦公室公布",how:"為就讀香港大學的 STEM 學生而設。大學會公布僱主名單，你直接向僱主申請，再向學院登記實習以領取津貼。"},
 hadata:{org:"醫院管理局",role:"暑期實習（數據科學及資訊科技）",place:"香港",when:"暑假",pay:"未有列明",deadline:"2026 年於 2 月 28 日截止",how:"適合二年級或以上的數據科學、電腦科學、電腦工程或人工智能學生。1 月起留意醫管局招聘網站的 2027 年職位。",yrLabel:"二年級或以上學生",subjLabel:"數據科學、電腦科學、電腦工程或人工智能學生"},
-hkgovsi:{org:"香港特區政府各部門",role:"專上學生暑期實習計劃",place:"香港",when:"約 8 星期，7 月初至 8 月下旬",pay:"每月 HK$11,500（2026 年）",deadline:"各部門自訂，大多在 2 月至 4 月（2026 年：社署 2 月 26 日、環保署 3 月 25 日、醫務衞生局 4 月 15 日）",how:"環保署、社署、康文署、教育局、廉政公署、海事處、政府飛行服務隊、醫務衞生局等部門會按學科開設職位。就讀海外大學的學生可直接電郵申請，附上學生身分證明；本地學生經大學就業中心申請。需懂粵語及英語。",yrLabel:"當年夏天不是畢業的學生"},
+hkgovsi:{org:"香港特區政府各部門",role:"專上學生暑期實習計劃",place:"香港",when:"約 8 星期，7 月初至 8 月下旬",pay:"每月 HK$11,500（2026 年）",deadline:"各部門自訂，大多在 2 月至 4 月（2026 年：社署 2 月 26 日、環保署 3 月 25 日、醫務衞生局 4 月 15 日）",how:"環保署、社署、康文署、教育局、廉政公署、海事處、政府飛行服務隊、醫務衞生局等部門會按學科開設職位。就讀海外大學的學生可直接電郵申請，附上學生身份證明；本地學生經大學就業中心申請。需懂粵語及英語。",yrLabel:"當年夏天不是畢業的學生"},
 hkhealth:{org:"醫務衞生局（基層醫療署）",role:"暑期實習生",place:"香港",when:"6 月至 8 月（2026 年）",pay:"每月 HK$11,500",deadline:"2026 年：4 月 15 日下午 6 時",how:"香港或海外大學的全日制學士生均可申請。用政府通用申請表連成績單，電郵至 phcchr@healthbureau.gov.hk。",yrLabel:"已完成第一年、當年夏天不畢業的學生",subjLabel:"醫療相關學科學生（醫科、護理、專職醫療、藥劑、社工、公共衞生、生物醫學）"},
-hkswd:{org:"社會福利署",role:"暑期實習生（社會工作）",place:"香港",when:"約 8 星期，7 月初至 8 月",pay:"每月 HK$11,500",deadline:"2026 年：2 月 26 日下午 6 時（大學可能另訂更早的截止日期）",how:"適合全日制社會工作學士生。在香港以外讀書的話，直接把申請表和學生身分證明電郵給社署。",subjLabel:"社會工作學生"},
+hkswd:{org:"社會福利署",role:"暑期實習生（社會工作）",place:"香港",when:"約 8 星期，7 月初至 8 月",pay:"每月 HK$11,500",deadline:"2026 年：2 月 26 日下午 6 時（大學可能另訂更早的截止日期）",how:"適合全日制社會工作學士生。在香港以外讀書的話，直接把申請表和學生身份證明電郵給社署。",subjLabel:"社會工作學生"},
 hklcsd:{org:"香港公共圖書館（康文署）",role:"暑期實習生（圖書館、館藏及展覽）",place:"香港",when:"暑假",pay:"未有列明",deadline:"通常在春季；2 月起留意康文署職位空缺",how:"協助處理珍本、音樂及藝術館藏、展覽和圖書館數據庫。每個職位對應指定學科。需懂中文輸入及 MS Office。",yrLabel:"升讀最後一年的學生",subjLabel:"中文、歷史、音樂、藝術史、文化研究或電腦科學學生"},
-hkma:{org:"香港金融管理局",role:"暑期實習",place:"香港",when:"通常 6 月至 8 月",pay:"未有列明",deadline:"2026 年於 2 月 13 日（香港時間）截止",how:"任何學科均可，成績需優異。金管局亦有冬季實習及學生大使計劃，在同一招聘頁面公布。",yrLabel:"本科生（以倒數第二年為佳）或碩士生"},
+hkma:{org:"香港金融管理局",role:"暑期實習",place:"香港",when:"通常 6 月至 8 月",pay:"未有列明",deadline:"2026 年於 2 月 13 日（香港時間）截止",how:"任何學科均可，成績需優異。金管局亦有冬季實習及學生大使計劃，在同一招聘頁面公布。",yrLabel:"本科生（以畢業前一年為佳）或碩士生"},
 clp:{org:"中電",role:"暑期實習（工程、商業、財務、人力資源、法律、可持續發展等）",place:"香港",when:"6 月至 8 月",pay:"未有列明",deadline:"2026 年：1 月 12 日至 3 月 15 日接受申請",how:"實習後須繼續學位課程，成績良好。網上遞交履歷及正式成績單。中電另有 12 個月的 sandwich 實習。"},
 cathay:{org:"國泰航空",role:"工程暑期實習計劃",place:"香港",when:"8 星期（2026 年為 7 月 2 日至 8 月 27 日）",pay:"未有列明",deadline:"2026 年於 2 月 1 日截止",how:"任何學位均可，工程學科優先。非本地學生可憑「不反對通知書」(NOL) 申請。英語需流利。",yrLabel:"非最後一年的本科生"},
-aoshk:{org:"A&O Shearman 香港",role:"2027 暑期實習計劃",place:"香港",when:"2027 年 6 月或 7 月，為期 4 星期",pay:"未有列明",deadline:"2026 年 12 月 7 日下午 5 時（香港時間）；滾動招聘，宜早申請",how:"適合就讀香港、英國、澳洲、新西蘭或其他普通法地區大學、成績預計 2:1 或以上的學生。最好能讀寫中文。",yrLabel:"倒數第二年或最後一年的法律系學生，或最後一年的非法律系學生"},
+aoshk:{org:"A&O Shearman 香港",role:"2027 暑期實習計劃",place:"香港",when:"2027 年 6 月或 7 月，為期 4 星期",pay:"未有列明",deadline:"2026 年 12 月 7 日下午 5 時（香港時間）；滾動招聘，宜早申請",how:"適合就讀香港、英國、澳洲、新西蘭或其他普通法地區大學、成績預計 2:1 或以上的學生。最好能讀寫中文。",yrLabel:"畢業前一年或最後一年的法律系學生，或最後一年的非法律系學生"},
 hkusi:{org:"香港大學",role:"港大暑期學院（本科課程）",place:"香港",when:"6 月 15 日至 7 月 31 日之間（2026 年）",pay:"學費見港大暑期學院網站",deadline:"2026 年：非本地學生 3 月 21 日，本地學生 5 月 31 日",how:"2026 年本科課程：AI Insider；Business Transformation Navigator（市場營銷、諮詢及資產管理）；管治與國際關係。"},
 hsbchk:{org:"滙豐銀行（香港）",role:"企業及機構銀行暑期實習",place:"香港",when:"2027 年 6 月起，為期 10 星期",pay:"未有列明",deadline:"已於 2026 年 10 月 30 日截止；請留意滙豐早期職涯網站的 2028 年度招聘",how:"範疇包括投資銀行、環球市場、環球投資研究及客戶關係管理。GPA 至少 3.2/4.0 或同等，英語流利。滙豐會考慮需要簽證擔保的申請人。整個滙豐集團（包括恒生銀行）每年只接受一份申請。",yrLabel:"2027 年 11 月至 2028 年 7 月畢業的學生"},
 pland:{org:"規劃署",role:"暑期實習生",place:"香港",when:"7 月至 8 月，最多 6 星期",pay:"每月 HK$11,500（2026 年）",deadline:"2026 年為 5 月 7 日，預計 2027 年 5 月初",how:"適合主修城市規劃或城市研究的學生。把求職信、申請表、中英文考試證書及成績單電郵至 dadsi@pland.gov.hk。不設面試。",subjLabel:"規劃或城市研究學生"},
-ha:{org:"房屋委員會／房屋署",role:"暑期實習生 – 城市規劃及其他範疇",place:"香港",when:"6 月至 8 月，2–3 個月",pay:"每月 HK$11,500（2026 年）",deadline:"2026 年為 4 月 2 日，預計 2027 年 4 月初",how:"須已完成第一年。海外大學學生可直接申請：電郵附錄二表格及學生身分證明，註明職位編號。另有測量及其他建築環境範疇。",yrLabel:"已完成第一年、2027 年不畢業的學生",subjLabel:"規劃、測量、建築或工程學生"},
+ha:{org:"房屋委員會／房屋署",role:"暑期實習生 – 城市規劃及其他範疇",place:"香港",when:"6 月至 8 月，2–3 個月",pay:"每月 HK$11,500（2026 年）",deadline:"2026 年為 4 月 2 日，預計 2027 年 4 月初",how:"須已完成第一年。海外大學學生可直接申請：電郵附錄二表格及學生身份證明，註明職位編號。另有測量及其他建築環境範疇。",yrLabel:"已完成第一年、2027 年不畢業的學生",subjLabel:"規劃、測量、建築或工程學生"},
 ura:{org:"市區重建局",role:"暑期實習計劃",place:"香港",when:"8–10 星期",pay:"未有列明",deadline:"每年 3 月底至 4 月招聘",how:"1 月時向市建局查詢海外大學學生可否申請。"},
 mtr:{org:"港鐵公司",role:"暑期實習計劃",place:"香港",when:"暑假",pay:"未有列明",deadline:"2026 年已截止；2027 年第一季有更新",how:"留意物業及城市規劃範疇（鐵路加物業）。1 月起查看網頁。"},
 arup:{org:"奧雅納東亞 (Arup)",role:"暑期實習",place:"香港及內地",when:"約 2 個月（香港）；3 個月（內地）",pay:"未有列明",deadline:"未公布，請聯絡辦事處",how:"電郵履歷至香港辦事處；內地職位在奧雅納微信公眾號公布。"},
 shkp:{org:"新鴻基地產",role:"暑期實習計劃",place:"香港",when:"2 個月",pay:"未有列明",deadline:"見網頁上的招聘時間表",how:"香港及海外大學學生均可申請。範疇包括經濟及物業研究、寫字樓租務及商場租務。查詢：hrm@shkp.com。"},
 hkhs:{org:"香港房屋協會",role:"實習（物業、管理）",place:"香港",when:"未有列明",pay:"未有列明",deadline:"未開放，可在 GradConnection 按「Notify me」",how:"設有物業管理職位的房屋機構。在 GradConnection 登記提示。"},
 nanfung:{org:"南豐集團",role:"實習（物業）",place:"香港",when:"未有列明",pay:"未有列明",deadline:"未開放，可在 GradConnection 按「Notify me」",how:"列於物業實習類別的地產發展商。在 GradConnection 登記提示。"},
-swire:{org:"太古地產",role:"暑期實習計劃",place:"香港",when:"暑假（日期未公布）",pay:"未有列明",deadline:"2026 年已截止；2027 年未公布",how:"主要招收測量、工程及環境研究的倒數第二年學生。規劃並非指定範疇。",yrLabel:"倒數第二年學生",subjLabel:"測量、工程或環境學科學生"},
+swire:{org:"太古地產",role:"暑期實習計劃",place:"香港",when:"暑假（日期未公布）",pay:"未有列明",deadline:"2026 年已截止；2027 年未公布",how:"主要招收測量、工程及環境研究的畢業前一年學生。規劃並非指定範疇。",yrLabel:"畢業前一年學生",subjLabel:"測量、工程或環境學科學生"},
 cbre:{org:"世邦魏理仕香港 (CBRE)",role:"實習（兼職）",place:"香港",when:"日期未有列明",pay:"未有列明",deadline:"2026 年職位於 1 月 5 日刊登；留意 2027 年",how:"2026 年職位要求永久性香港身份證或有效香港工作簽證、中英文流利，並於 2025 至 2027 年畢業。"},
 midland:{org:"美聯集團",role:"暑期實習計劃（8 星期）",place:"香港",when:"全職 8 星期",pay:"未有列明",deadline:"留意 2027 年日期",how:"大型地產代理，亦提供估值服務。"},
 centaline:{org:"中原測計行",role:"工作經驗（自薦電郵）",place:"香港",when:"暑假，長短與公司商議",pay:"可詢問",deadline:"2 月至 3 月發電郵",how:"住宅、寫字樓、商舖及工業物業估值，另有城市規劃及修訂地契。電郵 surveying@mail.centanet.com，電話 (852) 2139 6622。"},
@@ -309,7 +358,7 @@ const SUBJ={bus:["Business, economics or finance","商科、經濟或金融"],la
 const REL={builtenv:["builtenv","env"],bus:["finance","business","social"],law:["law"],cs:["tech"],eng:["eng","env"],sci:["sci","env"],health:["health"],psych:["social"],soc:["social","public"],hum:["media","edu"],arts:["media"],other:[]};
 const STAT=["Not started","Researching","Contacted","Applied","Interview","Offer","Declined / closed"];
 const STATZH={"Not started":"未開始","Researching":"資料搜集中","Contacted":"已聯絡","Applied":"已申請","Interview":"面試","Offer":"取錄","Declined / closed":"已拒絕／已截止"};
-const REQ={hkpr:["Hong Kong permanent residents only","只限香港永久性居民"],hkwork:["Needs a Hong Kong ID card or HK work visa","需持香港身份證或香港工作簽證"],open:["Open to anyone with the right to work in Hong Kong","任何有權在香港工作的人士均可申請"],unknown:["Residency rules not published; ask the employer","未有公布居民身分要求，請向僱主查詢"],sgwhp:["Ages 18–25 at a university in the UK or another listed country","18–25 歲、就讀英國或其他指定國家大學的學生"],krwhs:["HK residents aged 18–30","18–30 歲香港居民"],ukwork:["You need the right to work in the UK","需有在英國工作的權利"],ukstudy:["For students at UK universities","適合就讀英國大學的學生"],sponsor:["Any nationality; visa sponsorship considered","不限國籍；會考慮簽證擔保"],any:["Open to anyone (online)","任何人均可參加（網上）"],intl:["Open to students from any university","任何大學的學生均可申請"],cern:["Mainly for nationals of CERN member states; others may be considered","主要招收 CERN 成員國國民，其他國籍或會考慮"],rise:["For students at UK, Irish, US or Canadian universities","適合就讀英國、愛爾蘭、美國或加拿大大學的學生"],europe:["For undergraduates at European universities (UK included)","適合就讀歐洲（包括英國）大學的本科生"],supervisor:["You apply together with a lab supervisor who agrees to host you","需與願意接收你的實驗室導師一起申請"],nominated:["Your university has to nominate you","需由你的大學提名"],hkuni:["For students at Hong Kong universities","適合就讀香港大學的學生"],eanat:["UK, Commonwealth or EEA nationals with the right to work in the UK","只限有權在英國工作的英國、英聯邦或歐洲經濟區國民"]};
+const REQ={hkpr:["Hong Kong permanent residents only","只限香港永久性居民"],hkwork:["Needs a Hong Kong ID card or HK work visa","需持香港身份證或香港工作簽證"],open:["Open to anyone with the right to work in Hong Kong","任何有權在香港工作的人士均可申請"],unknown:["Residency rules not published; ask the employer","未有公布居民身份要求，請向僱主查詢"],sgwhp:["Ages 18–25 at a university in the UK or another listed country","18–25 歲、就讀英國或其他指定國家大學的學生"],krwhs:["HK residents aged 18–30","18–30 歲香港居民"],ukwork:["You need the right to work in the UK","需有在英國工作的權利"],ukstudy:["For students at UK universities","適合就讀英國大學的學生"],sponsor:["Any nationality; visa sponsorship considered","不限國籍；會考慮簽證擔保"],any:["Open to anyone (online)","任何人均可參加（網上）"],intl:["Open to students from any university","任何大學的學生均可申請"],cern:["Mainly for nationals of CERN member states; others may be considered","主要招收 CERN 成員國國民，其他國籍或會考慮"],rise:["For students at UK, Irish, US or Canadian universities","適合就讀英國、愛爾蘭、美國或加拿大大學的學生"],europe:["For undergraduates at European universities (UK included)","適合就讀歐洲（包括英國）大學的本科生"],supervisor:["You apply together with a lab supervisor who agrees to host you","需與願意接收你的實驗室導師一起申請"],nominated:["Your university has to nominate you","需由你的大學提名"],hkuni:["For students at Hong Kong universities","適合就讀香港大學的學生"],eanat:["UK, Commonwealth or EEA nationals with the right to work in the UK","只限有權在英國工作的英國、英聯邦或歐洲經濟區國民"]};
 const KEY="asia-placements-2027",PKEY="asia-placements-2027-profile",CKEY="asia-placements-2027-custom";
 function load(k,d){try{const v=localStorage.getItem(k);return v?Object.assign(d,JSON.parse(v)):d}catch(e){return d}}
 let stored=true;
@@ -373,6 +422,14 @@ function timing(r){
 function ymd(iso,add){const d=new Date(iso+"T00:00:00");d.setDate(d.getDate()+(add||0));return d.getFullYear()+String(d.getMonth()+1).padStart(2,"0")+String(d.getDate()).padStart(2,"0")}
 function calLink(r){if(!r.closes||days(r.closes)<0)return "";const q="action=TEMPLATE&text="+encodeURIComponent(L("Deadline: ","截止：")+r.org+" – "+rf(r,"role"))+"&dates="+ymd(r.closes)+"/"+ymd(r.closes,1)+"&details="+encodeURIComponent(L("Check the exact closing time: ","請查看確實截止時間：")+r.url);return ` · <a class="cal" href="https://calendar.google.com/calendar/render?${q}" target="_blank" rel="noopener">${L("Add deadline to Google Calendar","把截止日期加入 Google 日曆")}</a>`}
 const OPEN=new Set();
+const CONTACT="placementatlas48@gmail.com";
+const DIR={"cityu.edu.hk":["a university careers page","大學就業網頁"],"osa-career.hksyu.edu":["a university careers page","大學就業網頁"],"hkip.org.hk":["the HKIP job board","HKIP 招聘版"],"hk.gradconnection.com":["GradConnection","GradConnection"],"targetjobs.co.uk":["TARGETjobs","TARGETjobs"],"sourcing.hktdc.com":["the HKTDC directory","貿發局目錄"],"reco4014.arch.hku.hk":["an HKU student page","港大學生網頁"],"careerguidance.edb.hkedcity.net":["an EDB careers page","教育局生涯規劃網頁"],"alumni.hku.hk":["an HKU alumni page","港大校友網頁"],"hk.jobsdb.com":["Jobsdb","Jobsdb"]};
+const dshort=iso=>new Date(iso+"T00:00:00").toLocaleDateString(lang==="zh"?"zh-HK":"en-GB",{day:"numeric",month:"short",year:"numeric"});
+function srcLabel(u){const h=host(u);if(!h)return "";const d=DIR[h];return `${d?L("Via ","經由")+esc(T(d)):L("Official site","官方網站")} · ${esc(h)} · ${L("checked ","核對於 ")}${esc(dshort(LAST_CHECKED))}`}
+function reportLink(r){const sub=encodeURIComponent("Placement Atlas correction: "+r.org);const body=encodeURIComponent("Listing: "+r.org+" – "+r.role+"\nWhat's wrong:\n");return `<a href="mailto:${CONTACT}?subject=${sub}&body=${body}">${L("Is something wrong? Tell me","資料有錯？請告訴我")}</a>`}
+let profOpenS=null,fltOpenS=null;
+const NARROW=matchMedia("(max-width:900px)");
+const answered=()=>!!(prof.subj||prof.year||prof.res||prof.uni||prof.age);
 const NEWTAB=()=>`<span class="sr">${L(" (opens in a new tab)","（在新分頁開啟）")}</span>`;
 function host(u){try{return new URL(u).hostname.replace(/^www\./,"")}catch(e){return ""}}
 function applyHTML(r){
@@ -380,7 +437,7 @@ function applyHTML(r){
   const a=safeUrl(r.apply||r.url),em=r.email||"",tm=timing(r);
   if(tm&&tm.k==="closed")return `<p class="apply"><span class="via">${L("Closed for this cycle.","今期已截止。")}</span> <a href="${esc(a)}" target="_blank" rel="noopener">${L("Official page","官方網頁")}${NEWTAB()}</a></p>`;
   const label=r.spec?L("Firm's website","公司網站"):r.apply?L("Application page","申請頁面"):L("How to apply","申請方法");
-  return `<p class="apply">${a?`<a class="btn small" href="${esc(a)}" target="_blank" rel="noopener">${label} <span aria-hidden="true">↗</span>${NEWTAB()}</a><span class="via">${esc(host(a))}</span>`:""}${em?`<span>${a?L("or email","或電郵"):L("Apply by email:","電郵申請：")} <a href="mailto:${esc(em)}">${esc(em)}</a></span><button type="button" class="copy" data-copy="${esc(em)}">${L("Copy email","複製電郵")}</button>`:""}</p>`;
+  return `<p class="apply">${a?`<a class="btn small" href="${esc(a)}" target="_blank" rel="noopener">${label} <span aria-hidden="true">↗</span>${NEWTAB()}</a><span class="via">${srcLabel(a)}</span>`:""}${em?`<span>${a?L("or email","或電郵"):L("Apply by email:","電郵申請：")} <a href="mailto:${esc(em)}">${esc(em)}</a></span><button type="button" class="copy" data-copy="${esc(em)}">${L("Copy email","複製電郵")}</button>`:""}</p>`;
 }
 function rowHTML(r){
   const st=state.status[r.id]||"Not started",nt=state.notes[r.id]||"",e=elig(r),u=safeUrl(r.url);
@@ -394,12 +451,12 @@ function rowHTML(r){
   return `<article class="item${hl===r.id?" hl":""}${tm&&tm.k==="closed"?" closed":""}" id="row-${r.id}">
   <div class="item-head"><h3>${esc(org)}</h3>${tm?`<span class="when-tag ${tm.k}">${esc(tm.t)}</span>`:""}${urg?`<span class="when-tag">${esc(urg)}</span>`:""}</div>
   <p class="role">${esc(r.custom?(r.role||""):rf(r,"role"))}${r.custom?"":` <span class="where">· ${esc(rf(r,"place"))}</span>`}</p>
-  ${r.custom?(r.deadline?`<p class="facts">${L("Deadline","截止")}: ${esc(r.deadline)}</p>`:""):`<p class="facts">${esc(rf(r,"when"))}${pay}</p>`}
+  ${r.custom?(r.deadline?`<p class="facts">${L("Deadline","截止")}: ${esc(r.deadline)}</p>`:""):`<p class="facts">${esc(rf(r,"when"))}${pay}</p><p class="dline"><b>${L("Deadline:","截止：")}</b> ${esc(rf(r,"deadline"))}</p>`}
   <p class="elig e-${e.k||"none"}"><span aria-hidden="true">${mark}</span> ${esc(e.t)}</p>
   ${applyHTML(r)}
   ${st!=="Not started"?`<p class="mystatus">${L("My status","我的進度")}: ${esc(lang==="zh"?STATZH[st]||st:st)}</p>`:""}
   <details data-open-id="${r.id}"${isOpen?" open":""}><summary>${r.custom?L("Notes","筆記"):L("Details and notes","詳情及筆記")}</summary><div class="more">
-  ${r.custom?(u?`<p><a href="${esc(u)}" target="_blank" rel="noopener">${L("Open the link","開啟連結")}</a></p>`:""):`<p>${esc(rf(r,"how"))}</p><p><b>${L("Deadline:","截止日期：")}</b> ${esc(rf(r,"deadline"))}</p>${lang==="zh"?`<p class="hint">部分官方網頁只有英文。</p>`:""}<p><a href="${esc(u)}" target="_blank" rel="noopener">${L("Official page","官方網頁")}${NEWTAB()}</a>${calLink(r)}</p>`}
+  ${r.custom?(u?`<p><a href="${esc(u)}" target="_blank" rel="noopener">${L("Open the link","開啟連結")}</a></p>`:""):`<p>${esc(rf(r,"how"))}</p>${lang==="zh"?`<p class="hint">部分官方網頁只有英文。</p>`:""}<p><a href="${esc(u)}" target="_blank" rel="noopener">${L("Source page","資料來源")}${NEWTAB()}</a>${calLink(r)}</p><p class="hint">${reportLink(r)}</p>`}
   <div class="track"><label for="st-${r.id}">${L("My status","我的進度")}</label><select id="st-${r.id}" data-id="${r.id}">${STAT.map(s=>`<option value="${s}"${s===st?" selected":""}>${esc(lang==="zh"?STATZH[s]:s)}</option>`).join("")}</select>
   <label for="nt-${r.id}">${L("My notes","我的筆記")}</label><textarea id="nt-${r.id}" data-id="${r.id}" placeholder="${L("Who I contacted, when, what's next","聯絡了誰、何時、下一步")}">${esc(nt)}</textarea>${r.custom?`<button type="button" class="btn ghost" data-del="${r.id}">${L("Remove","刪除")}</button>`:""}</div></div></details></article>`;
 }
@@ -417,7 +474,7 @@ function resultHTML(){
 }
 const BOARDS=[
  [["Hong Kong job boards","香港求職網站"],[["GradConnection HK","https://hk.gradconnection.com"],["CTgoodjobs","https://www.ctgoodjobs.hk"],["JobsDB","https://hk.jobsdb.com"],["LinkedIn Jobs","https://www.linkedin.com/jobs"]]],
- [["Government jobs","政府職位"],[["Civil Service Bureau","https://www.csb.gov.hk"]]]];
+ [["Government jobs","政府職位"],[[["Civil Service Bureau","公務員事務局"],"https://www.csb.gov.hk"]]]];
 
 let sb=null,user=null,acct={email:"",msg:"",busy:false,push:"unknown",confirmDel:false,set:{notify_deadlines:true,notify_new:true,notify_email:true}};
 const ACCOUNTS=!!(SUPABASE_URL&&SUPABASE_ANON_KEY);
@@ -524,12 +581,13 @@ function cycleHTML(){
   const bands=[[1,5,"a",L("Insight weeks: apply over winter","體驗週：冬季申請")],[3,7,"b",L("Big schemes close","大型計劃截止")],[4,6,"c",L("Email small firms","主動電郵小公司")],[8,11,"d",L("Summer work","暑期工作")]];
   const dots=ROWS.filter(r=>r.closes&&days(r.closes)>=0).map(r=>({r,x:mi(new Date(r.closes+"T00:00:00"))})).filter(o=>o.x<12).sort((a,b)=>a.x-b.x);
   const dfm=iso=>new Date(iso+"T00:00:00").toLocaleDateString(lang==="zh"?"zh-HK":"en-GB",{day:"numeric",month:"short"});
-  return `<section class="cycle" id="cycle" aria-labelledby="cy"><div class="cy-head"><h2 id="cy">${L("Your 2026/27 application year","你的 2026/27 申請時間表")}</h2><p class="sub">${L("When to act, and the dated deadlines on this page.","甚麼時候行動，以及本頁列出的截止日期。")}</p></div>
+  return `<section class="cycle" id="cycle" aria-labelledby="cy"><div class="cy-head"><h2 id="cy">${L("Your 2026/27 application year","你的 2026/27 申請時間表")}</h2><p class="sub">${L("When to act, and the dated deadlines on this page. Pale bars are application windows; the dashed bar is the best time to email firms yourself.","甚麼時候行動，以及本頁列出的截止日期。淺色條代表申請期；虛線條是主動電郵公司的最佳時間。")}</p></div>
   <div class="cy-scroll"><div class="cy-track" role="img" aria-label="${L("Timeline: insight weeks open November to February, big schemes close January to April, email small firms in February and March, summer work June to August.","時間表：體驗週 11 月至 2 月開放申請，大型計劃 1 月至 4 月截止，2 月及 3 月主動電郵小公司，暑期工作 6 月至 8 月。")}">
   <div class="cy-bands">${bands.map(([a,b,k,t],i)=>`<span class="cy-band ${k}" style="left:${pct(a)};width:${pct(b-a)};top:${i*32}px">${esc(t)}</span>`).join("")}</div>
   <div class="cy-months">${months.map((m,i)=>`<span class="${Math.floor(now)===i?"cur":""}">${esc(m)}</span>`).join("")}</div>
   <span class="cy-now" style="left:${pct(now)}"><span>${L("Today","今天")}</span></span>
   </div></div>
+  <ol class="cy-list">${bands.map(([a,b,k,t])=>{const on=now>=a&&now<b;return `<li class="${k}${on?" on":""}"><span class="sw" aria-hidden="true"></span><span class="t">${esc(t)}</span><span class="r">${esc(months[a])}–${esc(months[b-1])}</span>${on?`<span class="nowtag">${L("Now","現在")}</span>`:""}</li>`}).join("")}</ol>
   ${dots.length?`<ul class="cy-dates">${dots.map(({r})=>`<li><time datetime="${r.closes}">${esc(dfm(r.closes))}</time> <a href="#row-${r.id}" data-jump="${r.id}">${esc(rf(r,"org"))}</a> <span class="left">${days(r.closes)===0?L("closes today","今日截止"):L(`${pl(days(r.closes))} left`,`尚餘 ${pl(days(r.closes))}`)}</span></li>`).join("")}</ul>`:""}</section>`;
 }
 function render(){
@@ -542,45 +600,49 @@ function render(){
   if(prof.subj&&subjMode!=="all")vis=vis.filter(r=>relevant(r)>=(subjMode==="any"?1:2));
   if(q){const t=q.toLowerCase();vis=vis.filter(r=>{const z=ZH[r.id]||{};return [r.org,r.role,r.place,r.how,r.when,z.org,z.role,z.place,z.how,z.when,...FIELD[r.field]||[],...REGION[r.region]||[],...SECT[r.sector]||[]].join(" ").toLowerCase().includes(t)})}
   const dkey=r=>{const tm=timing(r);if(tm&&tm.k==="closed")return 1e6;if(r.closes)return days(r.closes);if(r.opens)return 5000+days(r.opens);return 9000};
+  const erank=r=>({ok:0,check:1,no:2})[elig(r).k]??1;
   const closedLast=(a,b)=>((timing(a)||{}).k==="closed")-((timing(b)||{}).k==="closed");
   const hkFirst=(a,b)=>(b.region==="hk")-(a.region==="hk");
-  vis=vis.slice().sort((a,b)=>closedLast(a,b)||(sortBy==="deadline"?dkey(a)-dkey(b):sortBy==="az"?rf(a,"org").localeCompare(rf(b,"org"),lang==="zh"?"zh-HK":"en"):(relevant(b)-relevant(a))||hkFirst(a,b)||(dkey(a)-dkey(b))));
+  vis=vis.slice().sort((a,b)=>closedLast(a,b)||(sortBy==="deadline"?dkey(a)-dkey(b):sortBy==="az"?rf(a,"org").localeCompare(rf(b,"org"),lang==="zh"?"zh-HK":"en"):(relevant(b)-relevant(a))||(erank(a)-erank(b))||hkFirst(a,b)||(dkey(a)-dkey(b))));
   const hkN=ROWS.filter(r=>r.region==="hk").length,countries=new Set(ROWS.map(r=>r.region)).size,active=allRows().filter(r=>["Contacted","Applied","Interview","Offer"].includes(state.status[r.id])).length;
-  const group=(k,label,sub)=>{const g=vis.filter(r=>r.season===k);return g.length?`<section class="list"><h2>${label}</h2><p class="sub">${sub}</p>${g.map(rowHTML).join("")}</section>`:""};
+  const group=(k,label,sub)=>{const g=vis.filter(r=>r.season===k);if(!g.length)return "";const main=g.filter(r=>!r.spec),sp=g.filter(r=>r.spec);
+  const spOpen=OPEN.has("spec-"+k)||sp.some(r=>r.id===hl)||(q&&sp.length&&!main.length);
+  return `<section class="list"><h2>${label}</h2><p class="sub">${sub}</p>${main.map(rowHTML).join("")}${sp.length?`<details class="spec" data-open-id="spec-${k}"${spOpen?" open":""}><summary><span class="spec-t">${L(`Email these firms directly (${sp.length})`,`直接電郵這些公司（${sp.length} 間）`)}</span><span class="spec-s">${L("No advertised scheme, but they often take students who write in: ","沒有公開招聘計劃，但經常接受主動來信的學生：")}${esc(sp.map(r=>rf(r,"org")).join(L(", ","、")))}</span></summary>${sp.map(rowHTML).join("")}</details>`:""}</section>`};
   const urgent=ROWS.map(r=>{const tm=timing(r);return r.urgent?{r,t:rf(r,"urgent")}:(tm&&tm.k==="urgent"?{r,t:tm.t}:null)}).filter(Boolean);
   const sel=(id,key,first,map)=>`<div class="field"><label for="${id}">${first}</label><select id="${id}" data-flt="${key}">${opt("all",L("All","全部"),F[key])}${Object.entries(map).map(([k,v])=>opt(k,T(v),F[key])).join("")}</select></div>`;
-  app.innerHTML=`<div class="bar"><a class="brand" href="#top" aria-label="${L("Placement Atlas 2027, back to top","實習地圖 2027，返回頁頂")}"><svg class="mark" viewBox="0 0 32 32" aria-hidden="true"><path d="M6 24 L16 9 L26 20" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><circle cx="6" cy="24" r="4"/><circle cx="16" cy="9" r="4"/><circle cx="26" cy="20" r="4"/></svg><span class="bname">${L("Placement Atlas","實習地圖")}</span><span class="byear">2027</span></a>
-  <nav aria-label="${L("Sections","頁面")}"><a href="#cycle">${L("Your year","申請時間表")}</a><a href="#listings">${L("Listings","職位")}</a><a href="#guide">${L("Guide","指南")}</a></nav>
-  <div class="bar-end">${ACCOUNTS?`<a class="signin-link" href="#acct">${user?L("My account","我的帳戶"):L("Sign in","登入")}</a>`:""}<button type="button" class="langbtn" id="lang-btn" lang="${lang==="zh"?"en":"zh-Hant-HK"}">${lang==="zh"?"English":"繁體中文"}</button></div></div>
+  app.innerHTML=`<a class="skip" href="#results">${L("Skip to listings","跳至職位列表")}</a><div class="bar"><a class="brand" href="#top" aria-label="${L("Placement Atlas 2027, back to top","實習地圖 2027，返回頁頂")}"><svg class="mark" viewBox="0 0 32 32" aria-hidden="true"><path d="M6 24 L16 9 L26 20" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><circle cx="6" cy="24" r="4"/><circle cx="16" cy="9" r="4"/><circle cx="26" cy="20" r="4"/></svg><span class="bname">${L("Placement Atlas","實習地圖")}</span><span class="byear">2027</span></a>
+  <nav aria-label="${L("Sections","頁面")}"><a href="#cycle">${L("Your year","申請時間表")}</a><a href="#listings">${L("Listings","職位")}</a><a href="#guide">${L("Guide","指南")}</a><a href="#about">${L("About","關於")}</a></nav>
+  <div class="bar-end">${ACCOUNTS?`<a class="signin-link" href="#acct">${user?L("My account","我的帳戶"):L("Sign in","登入")}</a>`:""}<button type="button" class="langbtn" id="lang-btn" lang="${lang==="zh"?"en":"zh-Hant-HK"}" aria-label="${lang==="zh"?"English":"繁體中文"}"><span class="lf">${lang==="zh"?"English":"繁體中文"}</span><span class="ls" aria-hidden="true">${lang==="zh"?"EN":"中"}</span></button></div></div>
   <header class="hero" id="top"><h1>${L("Hong Kong placements for Hong Kong students","為香港學生而設的香港實習")}</h1>
   <p class="intro">${L("Internships, insight programmes and work experience in Hong Kong: government, banks, utilities, property, law and more. Every listing is checked against the official page, says plainly who can apply, and is free to use, wherever you study.","香港的實習、體驗計劃及工作經驗：政府、銀行、公用事業、地產、法律等。每一項都對照官方網頁核實，清楚寫明誰可以申請，完全免費，無論你在哪裡讀書都適用。")}</p>
   <form class="search" id="sform" role="search"><label for="f-q" class="sr">${L("Search opportunities","搜尋機會")}</label><input type="search" id="f-q" placeholder="${L("Search a firm, scheme or subject","搜尋公司、計劃或學科")}" value="${esc(q)}"><button type="submit" class="btn">${L("Search","搜尋")}</button></form>
   <p class="byline">${L(`${ROWS.length} listings, last checked ${dlong(LAST_CHECKED)}. Made by a Hong Kong student at the University of Manchester.`,`共 ${ROWS.length} 個機會，最後核對：${dlong(LAST_CHECKED)}。由一位在曼徹斯特大學讀書的香港學生製作。`)}</p></header>
   ${cycleHTML()}
   <div class="layout" id="listings"><aside class="side">
-  <section class="panel" aria-labelledby="fm"><h2 id="fm">${L("What can I apply for?","我可以申請甚麼？")}</h2>
+  <details class="panel prof" id="prof-d"${(profOpenS??(!NARROW.matches||!answered()))?" open":""}><summary><span class="sumrow"><h2 id="fm">${L("What can I apply for?","我可以申請甚麼？")}</h2><span class="edit">${L("Edit","修改")}</span></span>${answered()?`<span class="prof-sum">${esc([prof.subj&&T(SUBJ[prof.subj]),prof.year&&{"1":L("First year","一年級"),"2":L("Penultimate year","畢業前一年"),"3":L("Final year","最後一年"),"pg":L("Postgraduate","研究生")}[prof.year],prof.res&&{hkpr:L("HK permanent resident","香港永久性居民"),hkres:L("HK resident","香港居民"),nl:L("Non-local student","非本地學生"),other:L("Other status","其他身份")}[prof.res],prof.uni&&{hk:L("University in HK","在香港讀大學"),uk:L("University in the UK","在英國讀大學"),other:L("University overseas","在海外讀大學")}[prof.uni],prof.age&&L("Age "+prof.age,prof.age+" 歲")].filter(Boolean).join(" · "))}</span>`:`<span class="prof-sum">${L("Answer four questions to see what's open to you","回答四條問題，看看你可以申請甚麼")}</span>`}</summary>
   <p>${L("Fill in what you know. Every listing below will then say whether it's open to you, and the best fits for your subject move to the top. Nothing you enter leaves this browser.","填寫你知道的資料，下面每一項便會顯示你是否合資格，最適合你學科的會排在最前。你輸入的資料只會留在這個瀏覽器。")}</p>
   ${prof.subj?`<p class="fit"><b>${L(`${ROWS.filter(r=>relevant(r)===2).length} listing${ROWS.filter(r=>relevant(r)===2).length===1?"":"s"} ${ROWS.filter(r=>relevant(r)===2).length===1?"is":"are"} for ${esc(T(SUBJ[prof.subj]))}`,`有 ${ROWS.filter(r=>relevant(r)===2).length} 個職位適合${esc(T(SUBJ[prof.subj]))}`)}</b>${L(`, and ${ROWS.filter(r=>relevant(r)===1).length} more are open to any degree. Below, you'll only see jobs for your subject.`,`，另有 ${ROWS.filter(r=>relevant(r)===1).length} 個不限學科。下面只會顯示與你學科相關的職位。`)}</p>`:""}
   <div class="fields">
    <div class="field"><label for="p-subj">${L("What I study","我讀的學科")}</label><select id="p-subj" data-p="subj">${opt("",L("Choose…","請選擇…"),prof.subj)}${Object.entries(SUBJ).map(([k,v])=>opt(k,T(v),prof.subj)).join("")}</select></div>
-   <div class="field"><label for="p-year">${L("My year (2026/27)","我的年級（2026/27）")}</label><select id="p-year" data-p="year">${opt("",L("Choose…","請選擇…"),prof.year)}${opt("1",L("First year","一年級"),prof.year)}${opt("2",L("Penultimate year","倒數第二年"),prof.year)}${opt("3",L("Final year","最後一年"),prof.year)}${opt("pg",L("Postgraduate or graduate","研究生或已畢業"),prof.year)}</select></div>
-   <div class="field"><label for="p-res">${L("My Hong Kong status","我的香港身分")}</label><select id="p-res" data-p="res">${opt("",L("Choose…","請選擇…"),prof.res)}${opt("hkpr",L("Hong Kong permanent resident","香港永久性居民"),prof.res)}${opt("hkres",L("Hong Kong resident, not permanent","香港非永久性居民"),prof.res)}${opt("nl",L("Non-local student at a HK university","在港讀書的非本地學生"),prof.res)}${opt("other",L("Other","其他"),prof.res)}</select></div>
+   <div class="field"><label for="p-year">${L("My year (2026/27)","我的年級（2026/27）")}</label><select id="p-year" data-p="year">${opt("",L("Choose…","請選擇…"),prof.year)}${opt("1",L("First year","一年級"),prof.year)}${opt("2",L("Penultimate year (e.g. Year 2 of a 3-year degree)","畢業前一年（例如三年制課程的二年級）"),prof.year)}${opt("3",L("Final year","最後一年"),prof.year)}${opt("pg",L("Postgraduate or graduate","研究生或已畢業"),prof.year)}</select></div>
+   <div class="field"><label for="p-res">${L("My Hong Kong status","我的香港身份")}</label><select id="p-res" data-p="res">${opt("",L("Choose…","請選擇…"),prof.res)}${opt("hkpr",L("Hong Kong permanent resident","香港永久性居民"),prof.res)}${opt("hkres",L("Hong Kong resident, not permanent","香港非永久性居民"),prof.res)}${opt("nl",L("Non-local student at a HK university","在港讀書的非本地學生"),prof.res)}${opt("other",L("Other","其他"),prof.res)}</select></div>
    <div class="field"><label for="p-uni">${L("Where my university is","我的大學在")}</label><select id="p-uni" data-p="uni">${opt("",L("Choose…","請選擇…"),prof.uni)}${opt("hk",L("Hong Kong","香港"),prof.uni)}${opt("uk",L("Overseas (UK)","海外（英國）"),prof.uni)}${opt("other",L("Overseas (elsewhere)","海外（其他地方）"),prof.uni)}</select></div>
-   <div class="field"><label for="p-age">${L("My age","我的年齡")}</label><input type="number" id="p-age" data-p="age" min="16" max="60" value="${esc(prof.age)}"></div>
+   <div class="field"><label for="p-age">${L("My age (some schemes have age limits)","我的年齡（部分計劃有年齡限制）")}</label><input type="number" id="p-age" data-p="age" min="16" max="60" value="${esc(prof.age)}"></div>
   </div>
   ${sample?`<div class="needs"><label for="p-needs">${L("Anything else? Tell the AI what you're after","還有其他嗎？告訴 AI 你想找甚麼")}</label><textarea id="p-needs" data-p="needs" placeholder="${L("e.g. Second-year accounting student at a UK university, want a paid internship back in Hong Kong this summer","例如：英國大學二年級會計系學生，想今年暑假回香港做有薪實習")}">${esc(prof.needs)}</textarea></div>
   <div class="actions"><button type="button" class="btn" id="ask"${ai.busy?" disabled":""}>${L("Suggest what to apply for","建議我申請甚麼")}</button>${ai.busy?`<button type="button" class="btn ghost" id="stop">${L("Stop","停止")}</button>`:""}<p class="hint">${L("Runs on your own Claude account, which asks your permission the first time.","使用你自己的 Claude 帳戶，第一次會先問你是否允許。")}</p></div>${resultHTML()}`:``}
-  </section>
+  ${answered()?`<p><button type="button" class="linkbtn" id="p-clear">${L("Clear my answers","清除我的答案")}</button></p>`:""}
+  </details>
   <details class="visa"><summary>${L("Studying outside Hong Kong, or not a permanent resident? Read this","在香港以外讀書，或不是永久性居民？請先看這裡")}</summary><ul>
-   <li>${L(`<b>Studying overseas:</b> most Hong Kong government and company schemes accept students at overseas universities, but you usually apply directly (often by email with proof of student status) rather than through a careers centre. Check each listing.`,`<b>在海外讀書：</b>大部分香港政府及企業計劃都接受海外大學學生，但通常要直接申請（多數以電郵附上學生身分證明），而不是經大學就業中心。請查看每一項的細節。`)}</li>
+   <li>${L(`<b>Studying overseas:</b> most Hong Kong government and company schemes accept students at overseas universities, but you usually apply directly (often by email with proof of student status) rather than through a careers centre. Check each listing.`,`<b>在海外讀書：</b>大部分香港政府及企業計劃都接受海外大學學生，但通常要直接申請（多數以電郵附上學生身份證明），而不是經大學就業中心。請查看每一項的細節。`)}</li>
    <li>${L(`<b>Government internships:</b> many are for Hong Kong permanent residents only, and need Cantonese and English.`,`<b>政府實習：</b>不少只限香港永久性居民，並要求懂粵語及英語。`)}</li>
    <li>${L(`<b>Non-local students at HK universities:</b> internships usually need a No Objection Letter (NOL) from the Immigration Department.`,`<b>在港讀書的非本地學生：</b>實習一般需要向入境事務處申請「不反對通知書」(NOL)。`)}</li>
    <li>${L("Rules change, so always confirm with the employer or the Immigration Department before accepting an offer.","規定會改變，接受取錄前請務必向僱主或入境事務處確認。")}</li></ul></details>
-  <div class="toolbar">${sel("f-field","field",L("Field","範疇"),Object.fromEntries(Object.entries(FIELD).filter(([k])=>ROWS.some(r=>r.field===k))))}${sel("f-season","season",L("When","時間"),{easter:["Insight weeks & spring","體驗週及春季"],summer:["Summer work","暑期工作"],school:["Summer school","暑期學校"]})}<div class="field"><label for="f-sort">${L("Sort by","排序")}</label><select id="f-sort">${opt("match",L("Best match","最合適"),sortBy)}${opt("deadline",L("Closing soonest","最快截止"),sortBy)}${opt("az",L("A–Z","按名稱"),sortBy)}</select></div></div>
-  ${(prof.res||prof.year||prof.subj)?`<label class="toggle"><input type="checkbox" id="mine"${onlyMine?" checked":""}> ${L("Only show what I can apply for","只顯示我可以申請的")}</label>`:""}
+  <details class="filters" id="flt-d"${(fltOpenS??!NARROW.matches)?" open":""}><summary>${L("Filters and sort","篩選及排序")}${(F.field!=="all"?1:0)+(F.season!=="all"?1:0)+(onlyMine?1:0)?` <span class="n">(${(F.field!=="all"?1:0)+(F.season!=="all"?1:0)+(onlyMine?1:0)})</span>`:""}</summary><div class="toolbar">${sel("f-field","field",L("Type of job","職位類別"),Object.fromEntries(Object.entries(FIELD).filter(([k])=>ROWS.some(r=>r.field===k))))}${sel("f-season","season",L("When","時間"),{easter:["Insight weeks & spring","體驗週及春季"],summer:["Summer work","暑期工"],school:["Summer school","暑期學校"]})}<div class="field"><label for="f-sort">${L("Sort by","排序")}</label><select id="f-sort">${opt("match",L("Best match","最合適"),sortBy)}${opt("deadline",L("Closing soonest","最快截止"),sortBy)}${opt("az",L("A–Z","按名稱"),sortBy)}</select></div></div>
+  ${(prof.res||prof.year||prof.subj)?`<label class="toggle"><input type="checkbox" id="mine"${onlyMine?" checked":""}> ${L("Only show what I can apply for","只顯示我可以申請的")}</label>`:""}</details>
   </aside><div class="results">
   <p class="count" id="results">${L(`Showing ${vis.length} of ${ROWS.length}`,`顯示 ${vis.length} / ${ROWS.length} 項`)}${active?L(` · you're working on ${active}`,` · 你正在跟進 ${active} 項`):""}${prof.subj?`<span class="subjnav">${subjMode!=="rel"?` · <button type="button" class="linkbtn" data-sm="rel">${L(`Only ${esc(T(SUBJ[prof.subj]))} jobs`,`只顯示${esc(T(SUBJ[prof.subj]))}相關職位`)}</button>`:""}${subjMode==="rel"&&anyN?` · <button type="button" class="linkbtn" data-sm="any">${L(`Also show ${anyN} open to any degree`,`同時顯示 ${anyN} 個不限學科的職位`)}</button>`:""}${subjMode!=="all"?` · <button type="button" class="linkbtn" data-sm="all">${L("Show all","顯示全部")}</button>`:""}</span>`:""}</p>
-  ${group("easter",L("Insight weeks and spring","體驗週及春季計劃"),L("Short programmes and Easter work experience. Most open over winter, so this is where to start.","短期計劃及復活節工作經驗。大多在冬季開放，可以先從這裡開始。"))}${group("summer",L("Summer work","暑期工作"),L("Internships and work experience. Government and big-company schemes mostly close between January and April; small firms are happy to hear from you in February or March.","實習及工作經驗。政府及大企業的計劃大多在 1 月至 4 月截止；小公司則歡迎你在 2 月或 3 月主動聯絡。"))}${group("school",L("Summer schools","暑期學校"),L("Short summer study in Hong Kong.","在香港的短期暑期課程。"))}
+  ${group("easter",L("Insight weeks and spring","體驗週及春季計劃"),L("Short programmes and Easter work experience. Most open over winter, so this is where to start.","短期計劃及復活節工作經驗。大多在冬季開放，可以先從這裡開始。"))}${group("summer",L("Summer work","暑期工"),L("Internships and work experience. Government and big-company schemes mostly close between January and April; small firms are happy to hear from you in February or March.","實習及工作經驗。政府及大企業的計劃大多在 1 月至 4 月截止；小公司則歡迎你在 2 月或 3 月主動聯絡。"))}${group("school",L("Summer schools","暑期學校"),L("Short summer study in Hong Kong.","在香港的短期暑期課程。"))}
   ${vis.length?"":(prof.subj&&subjMode==="rel"&&!q?`<p class="hint">${L(`No Hong Kong listings for ${esc(T(SUBJ[prof.subj]))} yet. Use the buttons above to see jobs open to any degree, or try the job boards below.`,`暫時未有${esc(T(SUBJ[prof.subj]))}相關的香港職位。可以用上面的按鈕查看不限學科的職位，或看看下面的求職網站。`)}</p>`:`<p class="hint">${L(`Nothing matches${q?` "${esc(q)}"`:""} yet. Try another word, clear the filters, or check the job boards below.`,`暫時找不到${q?`「${esc(q)}」`:""}的結果。試試其他字眼、清除篩選，或看看下面的求職網站。`)}</p>`)}
   </div></div>
   <div class="extras" id="guide">
@@ -591,13 +653,17 @@ function render(){
   <div class="actions"><button type="button" class="btn" id="c-add">${L("Add to my tracker","加入我的記錄")}</button><button type="button" class="btn ghost" id="export">${L("Download my tracker (CSV)","下載我的記錄 (CSV)")}</button><span class="hint" aria-live="polite">${esc(formMsg)}</span></div>
   ${custom.items.length?custom.items.map(c=>rowHTML(Object.assign({custom:true},c))).join(""):""}
   </section>
-  <section class="panel" aria-labelledby="pm"><h2 id="pm">${L("Join your professional body as a student","以學生身分加入專業學會")}</h2><p>${L("It's free or nearly free, it looks good on applications, and it gets you into events where you meet people who hire. For planning and real estate:","免費或差不多免費，對申請有幫助，又可以參加活動認識業界人士。規劃及地產學生可考慮：")}</p>
+  <section class="panel" aria-labelledby="pm"><h2 id="pm">${L("Join your professional body as a student","以學生身份加入專業學會")}</h2><p>${L("It's free or nearly free, it looks good on applications, and it gets you into events where you meet people who hire. For planning and real estate:","免費或差不多免費，對申請有幫助，又可以參加活動認識業界人士。規劃及地產學生可考慮：")}</p>
   <dl class="boards"><dt>HKIS</dt><dd>${L("Surveying (Hong Kong)","測量（香港）")} · <b>${L("HK$70 a year","每年 HK$70")}</b> · ${L("check your degree is recognised first","先確認你的學位獲認可")} · <a href="https://wwww.hkis.org.hk/en/membership_become.html" target="_blank" rel="noopener">${L("Details","詳情")}</a></dd><dt>RICS</dt><dd>${L("Surveying and real estate","測量及地產")} · <b>${L("free","免費")}</b> · <a href="https://rics.org/join-rics/rics-member-grades/rics-student" target="_blank" rel="noopener">${L("Join","加入")}</a></dd></dl>
   <p class="hint">${L("Other subjects: ask your department which Hong Kong body to join, for example the HKIE for engineering or the HKICPA for accounting.","其他學科：問你的學系應加入哪個香港學會，例如工程可考慮 HKIE，會計可考慮 HKICPA。")}</p></section>
   <section aria-labelledby="jb" class="list"><h2 id="jb">${L("Where else to look","還可以去哪裡找")}</h2><p class="sub">${L("No single page can list everything. These are the job boards I'd check, plus your university careers service.","沒有一個網頁可以列出所有機會。以下是我會查看的求職網站，另外記得用大學的就業服務。")}</p>
-  <dl class="boards">${BOARDS.map(([k,list])=>`<dt>${esc(T(k))}</dt><dd>${list.map(([n,u])=>`<a href="${u}" target="_blank" rel="noopener">${esc(n)}</a>`).join(" · ")}</dd>`).join("")}</dl></section>
+  <dl class="boards">${BOARDS.map(([k,list])=>`<dt>${esc(T(k))}</dt><dd>${list.map(([n,u])=>`<a href="${u}" target="_blank" rel="noopener">${esc(T(n))}</a>`).join(" · ")}</dd>`).join("")}</dl></section>
   ${!comm&&FEEDBACK_URL?`<section class="panel" aria-labelledby="fb2"><h2 id="fb2">${L("Spotted a mistake or a missing scheme?","發現錯誤或遺漏？")}</h2><p>${L("Tell me. I read every message and fix things quickly.","請告訴我，我會細閱每個訊息並盡快更正。")}</p><p><a class="btn" href="${esc(FEEDBACK_URL)}" target="_blank" rel="noopener">${L("Send feedback","提供意見")}</a></p></section>`:""}
   ${comm?`<section class="panel" id="fb-panel" aria-labelledby="fb"><h2 id="fb">${L("Spotted a mistake or a missing scheme?","發現錯誤或遺漏？")}</h2><p>${L("Tell me. I read every comment and fix things quickly.","請告訴我，我會細閱每個留言並盡快更正。")}</p><div class="actions"><button type="button" class="btn" id="fb-btn">${L("Leave feedback","留言")}</button></div></section>`:""}
+  <section class="panel about" id="about" aria-labelledby="ab"><h2 id="ab">${L("About Placement Atlas","關於實習地圖")}</h2>
+  <p>${L("Placement Atlas is made by a Hong Kong student at the University of Manchester, for Hong Kong students who want work experience back home, wherever they study. It's free, has no ads, and isn't linked to any employer or university.","實習地圖由一位在曼徹斯特大學讀書的香港學生製作，為想回香港累積工作經驗的香港學生而設，無論你在哪裡讀書。網站免費、沒有廣告，亦與任何僱主或大學無關。")}</p>
+  <p><b>${L("How listings are checked.","如何核對資料。")}</b> ${L(`Every listing is checked against the employer's own page where there is one. Where an employer doesn't publish its scheme, the listing says which directory or careers page the details come from ("Via …"). All listings were last checked on ${dlong(LAST_CHECKED)}, and the whole list is rechecked every month.`,`每一項都會盡量對照僱主自己的網頁核實。如僱主沒有公開計劃，會註明資料來自哪個目錄或就業網頁（「經由……」）。所有資料最後核對日期為${dlong(LAST_CHECKED)}，整份清單每月重新核對一次。`)}</p>
+  <p><b>${L("Found a mistake or a missing scheme?","發現錯誤或遺漏？")}</b> ${L("Email ","請電郵至 ")}<a href="mailto:${CONTACT}?subject=${encodeURIComponent("Placement Atlas feedback")}">${CONTACT}</a>${L(". Every listing also has an \"Is something wrong?\" link under Details.","。每一項的「詳情」內亦有「資料有錯？」連結。")}</p></section>
   </div>
   <footer><p>${L(`Last checked ${dlong(LAST_CHECKED)}. Deadlines and rules change, so always confirm on the official page before you apply. I'm not linked to any of the employers or universities listed.`,`最後核對：${dlong(LAST_CHECKED)}。截止日期及規定或有改變，申請前請務必在官方網頁確認。本站與列出的僱主及大學並無關連。`)}</p><p>${stored?(ACCOUNTS?L("If you don't sign in, your answers, statuses and notes stay in this browser only. If you sign in, they're also stored in a private database so they sync across your devices and power your reminders; only you can read them, and you can delete your account at any time.","如不登入，你的資料、進度及筆記只會留在這個瀏覽器。如登入，資料亦會儲存在私人資料庫，以便在不同裝置同步及發送提醒；只有你能讀取，亦可隨時刪除帳戶。"):L("Your answers, statuses, notes and finds stay in this browser. Nobody else can see them, including me.","你的資料、進度、筆記及記錄只會留在這個瀏覽器，其他人（包括我）都看不到。")):L("Your browser isn't letting this page save, so your answers will clear when you leave.","你的瀏覽器不允許本頁儲存資料，離開後資料會被清除。")}</p></footer>`;
 }
@@ -653,6 +719,7 @@ document.addEventListener("click",e=>{
   if(e.target.closest("#stop")){ai.ctl&&ai.ctl.abort();return}
   const cp=e.target.closest("[data-copy]");if(cp){const v=cp.dataset.copy;const done=()=>{cp.textContent=L("Copied","已複製");setTimeout(()=>{cp.textContent=L("Copy email","複製電郵")},1500)};try{navigator.clipboard.writeText(v).then(done,()=>{cp.textContent=v})}catch(err){cp.textContent=v}return}
   if(e.target.closest("#c-add")){addCustom();return}
+  if(e.target.closest("#p-clear")){prof=Object.assign(prof,{subj:"",year:"",res:"",uni:"",age:""});put(PKEY,prof);subjMode="rel";onlyMine=false;profOpenS=true;render();const n=document.getElementById("p-subj");if(n)n.focus();return}
   if(e.target.closest("#export")){exportCSV();return}
   if(e.target.closest("#fb-btn")&&comm){comm.openComposer({element:document.getElementById("fb-panel")}).catch(()=>{comm=null;rerender()});return}
   const d=e.target.closest("[data-del]");if(d){custom.items=custom.items.filter(c=>c.id!==d.dataset.del);put(CKEY,custom);formMsg=L("Removed.","已刪除。");render();return}
@@ -677,7 +744,7 @@ async function exportCSV(){
   catch(e){const c=e&&e.code;if(c==="declined"){formMsg=L("Download cancelled.","已取消下載。")}else if(c==="rate_limited"){formMsg=L("A download prompt is already open.","下載提示已開啟。")}else{dl=null;formMsg=L("Downloads aren't available here.","這裡不能下載。")}}
   rerender();
 }
-document.addEventListener("toggle",e=>{const d=e.target;if(d&&d.dataset&&d.dataset.openId){if(d.open)OPEN.add(d.dataset.openId);else OPEN.delete(d.dataset.openId)}},true);
+document.addEventListener("toggle",e=>{const d=e.target;if(d&&d.id==="prof-d")profOpenS=d.open;if(d&&d.id==="flt-d")fltOpenS=d.open;if(d&&d.dataset&&d.dataset.openId){if(d.open)OPEN.add(d.dataset.openId);else OPEN.delete(d.dataset.openId)}},true);
 document.addEventListener("submit",e=>{if(e.target.id==="sform"){e.preventDefault();const i=document.getElementById("f-q");q=i?i.value.trim():"";F={field:"all",region:"all",season:"all"};render();const n=document.getElementById("results");if(n)n.scrollIntoView({behavior:matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth",block:"start"})}});
 document.addEventListener("input",e=>{if(e.target.id==="f-q"){q=e.target.value;rerender()}if(e.target.id==="ac-email")acct.email=e.target.value});
 document.addEventListener("keydown",e=>{if(e.target.id==="ac-email"&&e.key==="Enter"){e.preventDefault();sendLink()}});
